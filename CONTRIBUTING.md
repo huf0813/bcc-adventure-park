@@ -16,7 +16,7 @@ Here's how to submit a Pull Request (PR):
 3. Create a branch with descriptive name to work (i.e., `git checkout -b your-name`).
 4. Make changes, commit them, and push the branch to your repository fork.
 5. [Submit a pull request][pull-req] to the master branch.
-6. Please leave us your LINE contact, we will text for further information.
+6. Please leave us your LINE contact on pull request, we will text you for further information.
 
 [fork]: https://help.github.com/articles/fork-a-repo
 
