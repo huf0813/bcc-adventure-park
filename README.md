@@ -8,16 +8,15 @@ The company has prepared a great strategy before reopening the park; implementin
 
 ## :star: Minimum Viable Product (MVP)
 
-As we mentioned earlier, we need an tech that can support BCC Adventure Park in the future. Please consider to see these
-features below :
+As we have mentioned earlier, we need technology that can support BCC Adventure Park in the future. Please consider these features below:
 
 * A new Visitor can register to the system
 * Visitor can edit their account
 * Visitor can see their account
 * Visitor can remove their account
-* Visitor can do increase their balance
-* Visitor can do expense their balance (case : enter a park)
-* Visitor can see the invoices
+* Visitor can increase their balance
+* Visitor can expense their balance (i.e., enter a park)
+* Visitor can see their invoices
 * A new Park can be registered to the system
 * Park can be edited
 * Park can be seen
