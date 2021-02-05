@@ -120,4 +120,4 @@ Please follow the contributing guide [here](https://github.com/huf0813/bcc-adven
 
 ![cheers](https://media.giphy.com/media/kv5fbxHVAEOjrHeCLk/giphy.gif)
 ## This is not the only way to join with us
-## But. this is the one and only way to instantly pass
+## But, this is the one and only way to instantly pass
