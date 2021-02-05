@@ -25,49 +25,49 @@ As we have mentioned earlier, we need technology that can support BCC Adventure 
 ## :earth_americas: Service Implementation
 
 ```text
-STATEMENT => New park has built
-WHEN => A new park is registered to system
-THEN => System will record and return park's identity number
+GIVEN => New park has been built
+WHEN => A new park is registered to the system
+THEN => System will record and return the park's identity number
 
-STATEMENT => A park wants to be seen
+GIVEN => A park wants to be seen
 WHEN => A park's detail is seen
-THEN => System will show park's detail
+THEN => System will show the park's detail
 
-STATEMENT => A park wants to be edited
+GIVEN => A park wants to be edited
 WHEN => A park is edited
-THEN => System will show success edited notification
+THEN => System will show a "successfully edited" notification
 
-STATEMENT => A park wants to be removed
+GIVEN => A park wants to be removed
 WHEN => A park is removed
-THEN => System will show success removed notification
+THEN => System will show a "successfully removed" notification
 
-STATEMENT => I am a new visitor
-WHEN => i do registration to this system
-THEN => System will record and return visitor's identity number
+GIVEN => I am a new visitor
+WHEN => I register to the system
+THEN => System will record and return the visitor's identity number
 
-STATEMENT => I am a visitor
-WHEN => Visitor add an amount of money to system
-THEN => System will show success top up balance notification
+GIVEN => I am a visitor
+WHEN => Visitor add an amount of money to the system
+THEN => System will show a "successfully top-up balance" notification
 
-STATEMENT => I am a visitor
+GIVEN => I am a visitor
 WHEN => I took an action to see my current balance
-THEN => System will show visitor's current balance
+THEN => System will show the visitor's current balance
 
-STATEMENT => I am a visitor
+GIVEN => I am a visitor
 WHEN => I took an action to visit a park
-THEN => System will show success expense balance notification
+THEN => System will show a "successfully expensing balance" notification
 
-STATEMENT => I am a visitor
+GIVEN => I am a visitor
 WHEN => I took an action to see my profile
-THEN => System will show visitor's profile 
+THEN => System will show the visitor's profile 
 
-STATEMENT => I am a visitor
+GIVEN => I am a visitor
 WHEN => I took an action to edit my current balance
-THEN => System will show success edited notification
+THEN => System will show a "successfully edited" notification
 
-STATEMENT => I am a visitor
+GIVEN => I am a visitor
 WHEN => I took an action to delete my account
-THEN => System will show success deleted notification and fully return visitor's current balance
+THEN => System will show a "successfully deleted" notification and fully return the visitor's current balance
 ```
 
 ## :family: Entities and Actors
