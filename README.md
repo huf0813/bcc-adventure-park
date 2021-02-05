@@ -83,7 +83,7 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 3. [Cheatsheets](https://devhints.io/)
 4. [REST API](https://restfulapi.net/)
 5. [Insomnia REST Client](https://insomnia.rest/)
-6. [Test Driven Development](https://www.freecodecamp.org/news/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2/)
+6. [Test-Driven Development](https://www.freecodecamp.org/news/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2/)
 7. [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 8. [GraphQL](https://graphql.org/)
 9. [gRPC](https://grpc.io/)
@@ -103,7 +103,7 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 1. Fork this repository
 2. Follow the project Convention
 3. Finish all Service Implementation
-4. Implement Test Driven Development while working on it
+4. Implement Test-Driven Development while working on it
 
 ## :gift: Submission
 
