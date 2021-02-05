@@ -90,12 +90,12 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 
 ## :hocho: Accepted Weapons
 
-### BEFORE CHOOSING YOUR LANGUAGE, PLEASE VISIT OUR [CONVENTION](https://github.com/huf0813/bcc-adventure-park/blob/master/CONVENTION.md) ON THIS PROJECT
-
-### Any code that didn't follow the convention will be rejected
+> BEFORE CHOOSING YOUR LANGUAGE, PLEASE VISIT OUR [CONVENTION](CONVENTION.md) ON THIS PROJECT
+>
+> Any code that did not follow the convention will be rejected!
 
 1. Java
-2. Javascript (node js)
+2. JavaScript (Node.js)
 3. Go
 
 ## :school_satchel: Task
