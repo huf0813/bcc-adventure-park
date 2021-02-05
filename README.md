@@ -72,9 +72,7 @@ THEN => System will show a "successfully deleted" notification and fully return 
 
 ## :family: Entities and Actors
 
-We want to see your perspective about these problems. You can define various type of entities or actors. One thing for
-sure, there is no true or false statement to define entities. As long as the results are understandable, then go for
-it! :rocket:
+We want to see your perspective about these problems. You can define various types of entities or actors. One thing for sure, there is no true or false statement to define the entities. As long as the results are understandable, then go for it! :rocket:
 
 ## :blue_book: References
 
