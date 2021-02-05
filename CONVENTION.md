@@ -8,3 +8,6 @@
 6. Use `.gitignore`.
 7. Test Driven Development (we hope that this will be shown in each commit if you can).
 8. Don't forget to send your API Docs to us.
+9. Our deadline was expected before February 15, 2020. During this time, it can be changed to be longer period. Please,
+   consider to follow our media on [instagram](https://www.instagram.com/bccfilkom/) or Official Account on Line
+   @obw9635b for further information.

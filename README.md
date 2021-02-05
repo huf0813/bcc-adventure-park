@@ -94,6 +94,8 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 5. [Insomnia REST Client](https://insomnia.rest/)
 6. [Test Driven Development](https://www.freecodecamp.org/news/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2/)
 7. [Clean Arch](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+8. [GraphQL](https://graphql.org/)
+9. [GRPC](https://grpc.io/)
 
 ## :hocho: <b>Accepted Weapons</b>
 
