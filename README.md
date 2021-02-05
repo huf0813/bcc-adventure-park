@@ -76,17 +76,17 @@ We want to see your perspective about these problems. You can define various typ
 
 ## :blue_book: References
 
-You might be overwhelmed by these requirements. Don't worry, let's see all the equipments you need down below:
+You might be overwhelmed by these requirements. Don't worry, let's see all the equipment you need down below:
 
-1. [Example of Project](https://github.com/meong1234/fintech)
+1. [Example Project](https://github.com/meong1234/fintech)
 2. [Git](https://try.github.io/)
-3. [CheatSheets](https://devhints.io/)
+3. [Cheatsheets](https://devhints.io/)
 4. [REST API](https://restfulapi.net/)
 5. [Insomnia REST Client](https://insomnia.rest/)
 6. [Test Driven Development](https://www.freecodecamp.org/news/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2/)
-7. [Clean Arch](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+7. [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 8. [GraphQL](https://graphql.org/)
-9. [GRPC](https://grpc.io/)
+9. [gRPC](https://grpc.io/)
 
 ## :hocho: Accepted Weapons
 
