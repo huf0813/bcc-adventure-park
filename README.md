@@ -117,3 +117,7 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 ## :gift: <b>HOW TO SUBMIT</b>
 
 Please follow the contributing guide [here](https://github.com/huf0813/bcc-adventure-park/blob/master/CONTRIBUTING.md)
+
+![cheers](https://media.giphy.com/media/kv5fbxHVAEOjrHeCLk/giphy.gif)
+## This is not the only way to join with us
+## But. this is the one and only way to instantly pass
