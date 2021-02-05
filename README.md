@@ -1,20 +1,14 @@
 # BCC Adventure Park
 
-## :love_letter: <b>Invitation Letter</b>
+## :love_letter: Invitation Letter
 
-BCC is huge company that runs multiple businesses, one of them is BCC Adventure Park which runs on entertainment
-services. During this outbreak, our government is struggling to make zero cases in each day. But, at the same time, our
-county has to stabilize and improve the economic sector. BCC Adventure Park wants to help government to stabilize
-economic sector by opening their park.
+During this pandemic outbreak, the government is struggling to make zero cases each day. But, at the same time, the country has to stabilize and improve its economic sector. BCC is a huge company that runs multiple businesses. One of them is BCC Adventure Park which focuses on entertainment services. BCC wants to help the government stabilize the economic sector by reopening the Adventure Park.
 
-This Company also has a good strategy before opening their park, that is implementing technology. And, they need an help
-to make everything happen. This technology is used to simplify business process and obeying the government's regulation
-of health. By this letter, we invited you to join us on this journey to figure out the best solution. We can't wait to
-see your action to overcome this problem.
+The company has prepared a great strategy before reopening the park; implementing more technology into the business. This technology upgrade will be used to simplify business processes while obeying the government's health regulations. To accomplish this quickly, the company will need help. By this letter, we humbly invite you to join us on this journey to figure out the best solution. We cannot wait to see your ideas to overcome this problem.
 
-## :star: <b>Minimum Viable Product (MVP)</b>
+## :star: Minimum Viable Product (MVP)
 
-As we mention earlier, we need an tech that can support BCC Adventure Park in the future. Please consider to see these
+As we mentioned earlier, we need an tech that can support BCC Adventure Park in the future. Please consider to see these
 features below :
 
 * A new Visitor can register to the system
@@ -29,9 +23,9 @@ features below :
 * Park can be seen
 * Park can be removed
 
-## :earth_americas: <b>Service Implementation</b>
+## :earth_americas: Service Implementation
 
-```
+```text
 STATEMENT => New park has built
 WHEN => A new park is registered to system
 THEN => System will record and return park's identity number
@@ -77,13 +71,13 @@ WHEN => I took an action to delete my account
 THEN => System will show success deleted notification and fully return visitor's current balance
 ```
 
-## :family: <b>Entities and Actors</b>
+## :family: Entities and Actors
 
 We want to see your perspective about these problems. You can define various type of entities or actors. One thing for
 sure, there is no true or false statement to define entities. As long as the results are understandable, then go for
 it! :rocket:
 
-## :blue_book: <b>References</b>
+## :blue_book: References
 
 You might be overwhelmed by these requirements. Don't worry, let's see all the equipments you need down below:
 
@@ -97,7 +91,7 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 8. [GraphQL](https://graphql.org/)
 9. [GRPC](https://grpc.io/)
 
-## :hocho: <b>Accepted Weapons</b>
+## :hocho: Accepted Weapons
 
 ### BEFORE CHOOSING YOUR LANGUAGE, PLEASE VISIT OUR [CONVENTION](https://github.com/huf0813/bcc-adventure-park/blob/master/CONVENTION.md) ON THIS PROJECT
 
@@ -107,17 +101,19 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 2. Javascript (node js)
 3. Go
 
-## :school_satchel: <b>Task</b>
+## :school_satchel: Task
 
 1. Fork This Repository
 2. Follow the project convention
 3. Finish all Service Implementation
 4. Implement Test Driven Development
 
-## :gift: <b>HOW TO SUBMIT</b>
+## :gift: How to Submit
 
 Please follow the contributing guide [here](https://github.com/huf0813/bcc-adventure-park/blob/master/CONTRIBUTING.md)
 
 ![cheers](https://media.giphy.com/media/kv5fbxHVAEOjrHeCLk/giphy.gif)
+
 ## This is not the only way to join with us
+
 ## But, this is the one and only way to instantly pass
