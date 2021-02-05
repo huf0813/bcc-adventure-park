@@ -90,9 +90,9 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 
 ## :hocho: Accepted Weapons
 
-> BEFORE CHOOSING YOUR LANGUAGE, PLEASE VISIT OUR [CONVENTION](CONVENTION.md) ON THIS PROJECT
+> **BEFORE CHOOSING YOUR LANGUAGE, PLEASE VISIT OUR [CONVENTION](CONVENTION.md) ON THIS PROJECT**
 >
-> Any code that did not follow the convention will be rejected!
+> **Any code that did not follow the convention will be rejected!**
 
 1. Java
 2. JavaScript (Node.js)
@@ -100,17 +100,17 @@ You might be overwhelmed by these requirements. Don't worry, let's see all the e
 
 ## :school_satchel: Task
 
-1. Fork This Repository
-2. Follow the project convention
+1. Fork this repository
+2. Follow the project Convention
 3. Finish all Service Implementation
-4. Implement Test Driven Development
+4. Implement Test Driven Development while working on it
 
-## :gift: How to Submit
+## :gift: Submission
 
-Please follow the contributing guide [here](https://github.com/huf0813/bcc-adventure-park/blob/master/CONTRIBUTING.md)
+Please follow the instructions on the [Contributing guide](CONTRIBUTING.md).
 
 ![cheers](https://media.giphy.com/media/kv5fbxHVAEOjrHeCLk/giphy.gif)
 
-## This is not the only way to join with us
-
-## But, this is the one and only way to instantly pass
+> **This is *not* the only way to join us.**
+>
+> **But, this is the *one and only way* to instantly pass.**
