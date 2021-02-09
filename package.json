@@ -1,0 +1,34 @@
+{
+  "name": "bcc-adventure-park",
+  "version": "0.1.0",
+  "description": "During this pandemic outbreak, the government is struggling to make zero cases each day. But, at the same time, the country has to stabilize and improve its economic sector. BCC is a huge company that runs multiple businesses. One of them is BCC Adventure Park which focuses on entertainment services. BCC wants to help the government stabilize the economic sector by reopening the Adventure Park.",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "cross-env NODE_ENV=test mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/izfaruqi/bcc-adventure-park.git"
+  },
+  "author": "izfaruqi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/izfaruqi/bcc-adventure-park/issues"
+  },
+  "homepage": "https://github.com/izfaruqi/bcc-adventure-park#readme",
+  "dependencies": {
+    "fastify": "^3.11.0",
+    "fastify-swagger": "^4.3.0",
+    "knex": "^0.21.17",
+    "knex-stringcase": "^1.4.5",
+    "sqlite3": "^5.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "chai-http": "^4.3.0",
+    "cross-env": "^7.0.3",
+    "mocha": "^8.2.1"
+  }
+}
