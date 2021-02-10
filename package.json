@@ -21,6 +21,7 @@
   "dependencies": {
     "fastify": "^3.11.0",
     "fastify-swagger": "^4.3.0",
+    "keyv": "^4.0.3",
     "knex": "^0.21.17",
     "knex-stringcase": "^1.4.5",
     "sqlite3": "^5.0.1"
