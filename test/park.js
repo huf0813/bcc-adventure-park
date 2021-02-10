@@ -23,13 +23,13 @@ function assertDummyPark(park){
   assert.equal(park.entranceFee, 420360, "entranceFee is not the same as provided")
 }
 
-describe("/park endpoint", function () {
+describe("/park endpoints", function () {
   before(function(done) {
     db('parks').delete().then(() => done())
   })
 
   describe("POST /park, for inserting a park", function(){
-    describe('POST /park, insert a new park with full information', function(){
+    describe('insert a new park with full information', function(){
       before(function(done){
         this.requester.post('/park')
           .send(dummyPark)
@@ -53,7 +53,7 @@ describe("/park endpoint", function () {
       })
     })
   
-    describe('POST /park, insert a new park with partial information', function(){
+    describe('insert a new park with partial information', function(){
       before(function(done){
         this.requester.post('/park')
           .send({ name: dummyPark.name, entranceFee: dummyPark.entranceFee })
@@ -77,7 +77,7 @@ describe("/park endpoint", function () {
       })
     })
   
-    describe('POST /park, insert a new park with no name', function(){
+    describe('insert a new park with no name', function(){
       before(function(done){
         this.requester.post('/park')
           .send({ details: dummyPark.details, entranceFee: dummyPark.entranceFee })
