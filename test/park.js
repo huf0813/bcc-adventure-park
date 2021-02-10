@@ -44,8 +44,10 @@ describe("/park endpoint", function () {
       done()
     })
 
-    it('should return a full park object with the information provided', function(done){
-      assertDummyPark(this.requestResult.body)
+    it('should return the id of the inserted park', function(done){
+      assert.isObject(this.requestResult.body, "response is not an object")
+      assert.hasAllKeys(this.requestResult.body, ["id"], "id key does not exist")
+      assert.isNumber(this.requestResult.body.id, "id is not a number")
       done()
     })
   })

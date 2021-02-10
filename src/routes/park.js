@@ -40,12 +40,9 @@ module.exports = async (fastify, opts, done) => {
       response: {
         200: {
           type: 'object',
-          required: ['id', 'name', 'details', 'entranceFee'],
+          required: ['id'],
           properties: {
-            id: { type: 'number' },
-            name: { type: 'string' },
-            details: { type: 'string' },
-            entranceFee: { type: 'number' }
+            id: { type: 'number' }
           }
         }
       }
