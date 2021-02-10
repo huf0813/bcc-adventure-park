@@ -1,6 +1,5 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { as } = require('../src/utils/db');
 const assert = chai.assert;
 
 chai.use(chaiHttp)
@@ -284,7 +283,7 @@ describe("/park endpoint", function () {
       })
 
       it('should return a success message object', function(done){
-        assert.equal(this.requestResult.message, "success")
+        assert.equal(this.requestResult.body.message, "success")
         done()
       })
 

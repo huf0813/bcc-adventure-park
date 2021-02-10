@@ -24,9 +24,14 @@ async function editParkById(id, partialPark){
   return await db('parks').where({ id: id }).update({ ...partialPark })
 }
 
+async function deleteParkById(id){
+  return await db('parks').where({ id: id }).delete()
+}
+
 module.exports = {
   getAllParks,
   addPark,
   getParkById,
-  editParkById
+  editParkById,
+  deleteParkById
 }

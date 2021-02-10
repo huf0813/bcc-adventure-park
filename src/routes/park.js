@@ -170,4 +170,49 @@ module.exports = async (fastify, opts, done) => {
       rep.send({ ...req.body })
     }
   })
+
+  fastify.route({
+    method: 'DELETE',
+    url: '/:id',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            message: { type: "string" }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    handler: async (req, rep) => {
+      if(isNaN(parseInt(req.params.id))){
+        rep.code(400)
+        rep.send({
+          error: "Bad Request",
+          message: "Park ID should be a number"
+        })
+      }
+
+      const success = await parkService.deleteParkById(parseInt(req.params.id))
+      if(!success){
+        rep.code(404)
+        rep.send({
+          error: "Not Found",
+          message: "Park with id " + req.params.id + " doesn't exist"
+        })
+      }
+
+      rep.send({
+        message: "success"
+      })
+    }
+  })
 }
