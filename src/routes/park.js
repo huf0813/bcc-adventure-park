@@ -55,4 +55,44 @@ module.exports = async (fastify, opts, done) => {
       rep.send({ ...insertedPark })
     }
   })
+
+  fastify.route({
+    method: 'GET',
+    url: '/:id',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          required: ['id', 'name', 'details', 'entranceFee'],
+          properties: {
+            id: { type: 'number' },
+            name: { type: 'string' },
+            details: { type: 'string' },
+            entranceFee: { type: 'number' }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    handler: async (req, rep) => {
+      const park = await parkService.getParkById(parseInt(req.params.id))
+      if(park == null){
+        rep.code(404)
+        rep.send({
+          error: "Not Found",
+          message: "Park with id " + req.params.id + " doesn't exist"
+        })
+      }
+      rep.send({
+        ...park
+      })
+    }
+  })
 }

@@ -96,7 +96,7 @@ describe("/park endpoint", function () {
     })
 
     it('should return a full park object with dummy park information', function(done){
-      assertDummyPark(assertDummyPark(this.requestResult.body))
+      assertDummyPark(this.requestResult.body)
       done()
     })
   })

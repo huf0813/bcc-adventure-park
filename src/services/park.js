@@ -9,6 +9,10 @@ async function getAllParks(){
   return await db('parks').select("*") 
 }
 
+async function getParkById(id){
+  return await db('parks').select("*").where({ id: id }).first()
+}
+
 async function addPark(park){
   const fullPark = {...defaultParkObject, ...park}
   const insertedId = await db('parks').insert(fullPark)
@@ -17,5 +21,6 @@ async function addPark(park){
 
 module.exports = {
   getAllParks,
-  addPark
+  addPark,
+  getParkById
 }
