@@ -193,10 +193,9 @@ describe("/park endpoint", function () {
         done()
       })
 
-      it('should return the id and the current name of the edited park', function(done){
+      it('should return the current name of the edited park', function(done){
         assert.isObject(this.requestResult.body)
-        assert.hasAllKeys(this.requestResult.body, ["id", "name"], "body does not have the required keys")
-        assert.equal(this.requestResult.body.id, this.idToBeTested, "id returned does not match the id given")
+        assert.hasAllKeys(this.requestResult.body, ["name"], "body does not have the required keys")
         assert.equal(this.requestResult.body.name, "Integration Testing Park #2", "name returned does not match the name given")
       })
     })
@@ -213,10 +212,9 @@ describe("/park endpoint", function () {
         done()
       })
 
-      it('should return the id and the current details of the edited park', function(done){
+      it('should return the current details of the edited park', function(done){
         assert.isObject(this.requestResult.body)
-        assert.hasAllKeys(this.requestResult.body, ["id", "details"], "body does not have the required keys")
-        assert.equal(this.requestResult.body.id, this.idToBeTested, "id returned does not match the id given")
+        assert.hasAllKeys(this.requestResult.body, ["details"], "body does not have the required keys")
         assert.equal(this.requestResult.body.details, "UUHHH testing...", "details returned does not match the details given")
       })
     })
@@ -233,10 +231,9 @@ describe("/park endpoint", function () {
         done()
       })
 
-      it('should return the id and the current entrance fee of the edited park', function(done){
+      it('should return the current entrance fee of the edited park', function(done){
         assert.isObject(this.requestResult.body)
-        assert.hasAllKeys(this.requestResult.body, ["id", "entranceFee"], "body does not have the required keys")
-        assert.equal(this.requestResult.body.id, this.idToBeTested, "id returned does not match the id given")
+        assert.hasAllKeys(this.requestResult.body, ["entranceFee"], "body does not have the required keys")
         assert.equal(this.requestResult.body.entranceFee, 360420, "entranceFee returned does not match the entranceFee given")
       })
     })
