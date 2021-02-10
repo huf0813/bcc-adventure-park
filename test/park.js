@@ -262,6 +262,32 @@ describe("/park endpoint", function () {
         done()
       })
     })
+
+    describe('try to edit a nonexistant park id', function(){
+      before(async function(){
+        await this.requester.patch("/park/-1").send({ name: modifiedPark.name }).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 404', function(done){
+        assert.equal(this.requestResult.status, 404)
+        done()
+      })
+    })
+  
+    describe('try to edit with an invalid id (non-numeric)', function(){
+      before(async function(){
+        await this.requester.patch("/park/bcc").send({ name: modifiedPark.name }).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 400', function(done){
+        assert.equal(this.requestResult.status, 400)
+        done()
+      })
+    })
   })
 
   describe('DELETE /park/:id, for deleting a park', function(){
@@ -294,7 +320,7 @@ describe("/park endpoint", function () {
       })
     })
 
-    describe('delete a park by a nonexistant id', function(){
+    describe('try to delete a park by a nonexistant id', function(){
       before(async function(){
         await this.requester.delete('/park/-1').then((res, err) => {
           this.requestResult = res
@@ -307,7 +333,7 @@ describe("/park endpoint", function () {
       })
     })
 
-    describe('delete a park by an invalid id (non-numeric)' , function(){
+    describe('try to delete a park by an invalid id (non-numeric)' , function(){
       before(async function(){
         await this.requester.delete('/park/bcc').then((res, err) => {
           this.requestResult = res
