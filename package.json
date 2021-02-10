@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/izfaruqi/bcc-adventure-park#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "fastify": "^3.11.0",
     "fastify-swagger": "^4.3.0",
     "keyv": "^4.0.3",
