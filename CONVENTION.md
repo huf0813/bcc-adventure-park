@@ -8,4 +8,4 @@
 6. Use `.gitignore`.
 7. Test-Driven Development (we hope that this will be shown in each commit if you can).
 8. Don't forget to send your API Docs to us.
-9. The deadline was expected before February 15, 2020. During this time, it may change. Consider following our social media on [Instagram](https://www.instagram.com/bccfilkom/) or LINE Official Account (@obw9635b) for further information.
+9. The deadline was expected before February 15, 2020. There is an interview after you did a pull request. Please, prepare your self for interview, our team will contact you immediately. During this time, it may change. Consider following our social media on [Instagram](https://www.instagram.com/bccfilkom/) or LINE Official Account (@obw9635b) for further information.
