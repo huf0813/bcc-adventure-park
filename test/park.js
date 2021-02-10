@@ -1,5 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const { as } = require('../src/utils/db');
 const assert = chai.assert;
 
 chai.use(chaiHttp)
@@ -260,6 +261,37 @@ describe("/park endpoint", function () {
         assert.equal(park.details, modifiedPark.details, "park details is different")
         assert.equal(park.entranceFee, modifiedPark.entranceFee, "park entranceFee is different")
         done()
+      })
+    })
+  })
+
+  describe('DELETE /park/:id, for deleting a park', function(){
+    before(async function(){
+      await this.requester.post('/park').send(dummyPark).then((res, err) => {
+        this.idToBeTested = res.body.id
+      })
+    })
+    describe('DELETE /park/:id, delete a park by a valid id', function(){
+      before(async function(){
+        await this.requester.delete('/park/' + this.idToBeTested).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return a success message object', function(done){
+        assert.equal(this.requestResult.message, "success")
+        done()
+      })
+
+      it('the deleted park should not be obtainable by GET /park/:id', async function(){
+        await this.requester.get('/park/' + this.idToBeTested).then((res, err) => {
+          assert.equal(res.status, 404)
+        })
       })
     })
   })
