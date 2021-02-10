@@ -52,6 +52,47 @@ describe("/park endpoint", function () {
     })
   })
 
+  describe('POST /park, insert a new park with partial information', function(){
+    before(function(done){
+      this.requester.post('/park')
+        .send({ name: dummyPark.name, entranceFee: dummyPark.entranceFee })
+        .then((res, err) => {
+          if(err){ console.error(err) }
+          this.requestResult = res
+          done()
+        })
+    })
+
+    it('should return status code 200', function(done){
+      assert.equal(this.requestResult.status, 200)
+      done()
+    })
+
+    it('should return the id of the inserted park', function(done){
+      assert.isObject(this.requestResult.body, "response is not an object")
+      assert.hasAllKeys(this.requestResult.body, ["id"], "id key does not exist")
+      assert.isNumber(this.requestResult.body.id, "id is not a number")
+      done()
+    })
+  })
+
+  describe('POST /park, insert a new park with no name', function(){
+    before(function(done){
+      this.requester.post('/park')
+        .send({ details: dummyPark.details, entranceFee: dummyPark.entranceFee })
+        .then((res, err) => {
+          if(err){ console.error(err) }
+          this.requestResult = res
+          done()
+        })
+    })
+
+    it('should return status code 400', function(done){
+      assert.equal(this.requestResult.status, 400)
+      done()
+    })
+  })
+
   describe('GET /park, get list of parks', function(){
     before(function(done){
       this.requester.get('/park')
