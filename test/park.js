@@ -270,7 +270,7 @@ describe("/park endpoint", function () {
         this.idToBeTested = res.body.id
       })
     })
-    describe('DELETE /park/:id, delete a park by a valid id', function(){
+    describe('delete a park by a valid id', function(){
       before(async function(){
         await this.requester.delete('/park/' + this.idToBeTested).then((res, err) => {
           this.requestResult = res
@@ -291,6 +291,32 @@ describe("/park endpoint", function () {
         await this.requester.get('/park/' + this.idToBeTested).then((res, err) => {
           assert.equal(res.status, 404)
         })
+      })
+    })
+
+    describe('delete a park by a nonexistant id', function(){
+      before(async function(){
+        await this.requester.delete('/park/-1').then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 404', function(done){
+        assert.equal(this.requestResult.status, 404)
+        done()
+      })
+    })
+
+    describe('delete a park by an invalid id (non-numeric)' , function(){
+      before(async function(){
+        await this.requester.delete('/park/bcc').then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 400', function(done){
+        assert.equal(this.requestResult.status, 400)
+        done()
       })
     })
   })
