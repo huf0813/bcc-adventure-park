@@ -28,13 +28,13 @@ describe('/auth endpoints', function(){
         done()
       })
   
-      it('new user should be available on db', async function(){
+      it('new user should be available in the db', async function(){
           const userFromDb = await db('users').select("*").where({ email: newUser.email }).first()
-          assert.isDefined(userFromDb, "new user not found on db")
+          assert.isDefined(userFromDb, "new user not found in the db")
       })
     })
 
-    describe('insert a new user with only an email', function(){
+    describe('try to insert a new user with only an email', function(){
       before(async function(){
         await db('users').delete()
         await this.requester.post('/auth/register').send({ email: newUser.email }).then((res, err) => {
@@ -48,7 +48,7 @@ describe('/auth endpoints', function(){
       })
     })
 
-    describe('insert a new user with only a password', function(){
+    describe('try to insert a new user with only a password', function(){
       before(async function(){
         await db('users').delete()
         await this.requester.post('/auth/register').send({ pass: newUser.pass }).then((res, err) => {
@@ -62,6 +62,25 @@ describe('/auth endpoints', function(){
       })
     })
 
-
+    describe('try to insert a user with an email that already exists in the db', function(){
+      before(async function(){
+        await db('users').delete()
+        await this.requester.post('/auth/register').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+        })
+        await this.requester.post('/auth/register').send({ email: newUser.email, pass: newUser.pass + "_its_a_different_pass_now" }).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 403', function(done){
+        assert.equal(this.requestResult.status, 403)
+        done()
+      })
+  
+      it('no new user should be available in the db', async function(){
+          const userFromDb = await db('users').select("*").where({ email: newUser.email })
+          assert.lengthOf(userFromDb, 1, "new user found in the db")
+      })
+    })
   })
 })
