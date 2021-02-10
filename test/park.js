@@ -28,6 +28,3 @@ describe("/park endpoint", function () {
   })
 
 })
-
-
-

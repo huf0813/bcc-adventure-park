@@ -44,7 +44,7 @@ module.exports = async (fastify, opts, done) => {
       }
     },
     handler: async (req, rep) => {
-           
+      
     }
   })
 }

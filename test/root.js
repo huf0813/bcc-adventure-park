@@ -27,5 +27,3 @@ describe("/ endpoint", function () {
     })
   })
 })
-
-
