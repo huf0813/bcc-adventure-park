@@ -1,4 +1,4 @@
-const { default: fastify } = require("fastify");
+const parkService = require('../services/park')
 
 module.exports = async (fastify, opts, done) => {
   fastify.route({
@@ -16,7 +16,11 @@ module.exports = async (fastify, opts, done) => {
       }
     },
     handler: async (req, rep) => {
-
+      const parks = await parkService.getAllParks()
+      rep.send({
+        total: parks.length,
+        parks: parks
+      })
     }
   })
 
@@ -36,15 +40,19 @@ module.exports = async (fastify, opts, done) => {
       response: {
         200: {
           type: 'object',
+          required: ['id', 'name', 'details', 'entranceFee'],
           properties: {
-            total: { type: 'number' },
-            parks: { type: 'array' }
+            id: { type: 'number' },
+            name: { type: 'string' },
+            details: { type: 'string' },
+            entranceFee: { type: 'number' }
           }
         }
       }
     },
     handler: async (req, rep) => {
-      
+      const insertedPark = await parkService.addPark(req.body)
+      rep.send({ ...insertedPark })
     }
   })
 }
