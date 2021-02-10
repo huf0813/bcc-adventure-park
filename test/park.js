@@ -101,6 +101,32 @@ describe("/park endpoint", function () {
     })
   })
 
+  describe('GET /park/:id, try to get a nonexistant park id', function(){
+    before(async function(){
+      await this.requester.get("/park/-1").then((res, err) => {
+        this.requestResult = res
+      })
+    })
+
+    it('should return status code 404', function(done){
+      assert.equal(this.requestResult.status, 404)
+      done()
+    })
+  })
+
+  describe('GET /park/:id, try to use an invalid id (non-numeric)', function(){
+    before(async function(){
+      await this.requester.get("/park/bcc").then((res, err) => {
+        this.requestResult = res
+      })
+    })
+
+    it('should return status code 400', function(done){
+      assert.equal(this.requestResult.status, 400)
+      done()
+    })
+  })
+
   after(function(done){
     db('parks').delete().then(() => done())
   })

@@ -82,6 +82,14 @@ module.exports = async (fastify, opts, done) => {
       }
     },
     handler: async (req, rep) => {
+      if(isNaN(parseInt(req.params.id))){
+        rep.code(400)
+        rep.send({
+          error: "Bad Request",
+          message: "Park ID should be a number"
+        })
+      }
+
       const park = await parkService.getParkById(parseInt(req.params.id))
       if(park == null){
         rep.code(404)
@@ -90,6 +98,7 @@ module.exports = async (fastify, opts, done) => {
           message: "Park with id " + req.params.id + " doesn't exist"
         })
       }
+
       rep.send({
         ...park
       })
