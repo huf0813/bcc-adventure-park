@@ -12,6 +12,14 @@ module.exports = async (fastify, opts, done) => {
             total: { type: 'number' },
             parks: { type: 'array' }
           }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
         }
       }
     },
@@ -43,6 +51,14 @@ module.exports = async (fastify, opts, done) => {
           required: ['id'],
           properties: {
             id: { type: 'number' }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
           }
         }
       }
@@ -99,6 +115,59 @@ module.exports = async (fastify, opts, done) => {
       rep.send({
         ...park
       })
+    }
+  })
+
+  fastify.route({
+    method: 'PATCH',
+    url: '/:id',
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          details: { type: 'string' },
+          entranceFee: { type: 'number' }
+        }
+      },
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            details: { type: 'string' },
+            entranceFee: { type: 'number' }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    handler: async (req, rep) => {
+      if(isNaN(parseInt(req.params.id))){
+        rep.code(400)
+        rep.send({
+          error: "Bad Request",
+          message: "Park ID should be a number"
+        })
+      }
+
+      const success = await parkService.editParkById(req.params.id, req.body)
+      if(!success){
+        rep.code(404)
+        rep.send({
+          error: "Not Found",
+          message: "Park with id " + req.params.id + " doesn't exist"
+        })
+      }
+      
+      rep.send({ ...req.body })
     }
   })
 }

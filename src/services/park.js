@@ -1,3 +1,4 @@
+const park = require('../routes/park')
 const db = require('../utils/db')
 const defaultParkObject = {
   name: "",
@@ -19,8 +20,13 @@ async function addPark(park){
   return { id: insertedId, ...fullPark }
 }
 
+async function editParkById(id, partialPark){
+  return await db('parks').where({ id: id }).update({ ...partialPark })
+}
+
 module.exports = {
   getAllParks,
   addPark,
-  getParkById
+  getParkById,
+  editParkById
 }

@@ -176,14 +176,14 @@ describe("/park endpoint", function () {
 
   describe('PATCH /park/:id, for editing parks', function(){
     before(async function(){
-      await this.requester.post('/post').send(dummyPark).then((res, err) => {
+      await this.requester.post('/park').send(dummyPark).then((res, err) => {
         this.idToBeTested = res.body.id
       })
     })
 
     describe("edit a park's name", function(){
       before(async function(){
-        await this.requester.patch('/post/:id').send({ id: this.idToBeTested, name: "Integration Testing Park #2"}).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).send({ name: "Integration Testing Park #2"}).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -197,12 +197,13 @@ describe("/park endpoint", function () {
         assert.isObject(this.requestResult.body)
         assert.hasAllKeys(this.requestResult.body, ["name"], "body does not have the required keys")
         assert.equal(this.requestResult.body.name, "Integration Testing Park #2", "name returned does not match the name given")
+        done()
       })
     })
 
     describe("edit a park's details", function(){
       before(async function(){
-        await this.requester.patch('/post/:id').send({ id: this.idToBeTested, details: "UUHHH testing..."}).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).send({ details: "UUHHH testing..."}).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -216,12 +217,13 @@ describe("/park endpoint", function () {
         assert.isObject(this.requestResult.body)
         assert.hasAllKeys(this.requestResult.body, ["details"], "body does not have the required keys")
         assert.equal(this.requestResult.body.details, "UUHHH testing...", "details returned does not match the details given")
+        done()
       })
     })
 
     describe("edit a park's entrance fee", function(){
       before(async function(){
-        await this.requester.patch('/post/:id').send({ id: this.idToBeTested, entranceFee: 360420 }).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).send({ entranceFee: 360420 }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -235,6 +237,7 @@ describe("/park endpoint", function () {
         assert.isObject(this.requestResult.body)
         assert.hasAllKeys(this.requestResult.body, ["entranceFee"], "body does not have the required keys")
         assert.equal(this.requestResult.body.entranceFee, 360420, "entranceFee returned does not match the entranceFee given")
+        done()
       })
     })
   })
