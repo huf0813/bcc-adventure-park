@@ -28,145 +28,217 @@ describe("/park endpoint", function () {
     db('parks').delete().then(() => done())
   })
 
-  describe('POST /park, insert a new park with full information', function(){
-    before(function(done){
-      this.requester.post('/park')
-        .send(dummyPark)
-        .then((res, err) => {
-          if(err){ console.error(err) }
-          this.requestResult = res
-          done()
-        })
-    })
-
-    it('should return status code 200', function(done){
-      assert.equal(this.requestResult.status, 200)
-      done()
-    })
-
-    it('should return the id of the inserted park', function(done){
-      assert.isObject(this.requestResult.body, "response is not an object")
-      assert.hasAllKeys(this.requestResult.body, ["id"], "id key does not exist")
-      assert.isNumber(this.requestResult.body.id, "id is not a number")
-      done()
-    })
-  })
-
-  describe('POST /park, insert a new park with partial information', function(){
-    before(function(done){
-      this.requester.post('/park')
-        .send({ name: dummyPark.name, entranceFee: dummyPark.entranceFee })
-        .then((res, err) => {
-          if(err){ console.error(err) }
-          this.requestResult = res
-          done()
-        })
-    })
-
-    it('should return status code 200', function(done){
-      assert.equal(this.requestResult.status, 200)
-      done()
-    })
-
-    it('should return the id of the inserted park', function(done){
-      assert.isObject(this.requestResult.body, "response is not an object")
-      assert.hasAllKeys(this.requestResult.body, ["id"], "id key does not exist")
-      assert.isNumber(this.requestResult.body.id, "id is not a number")
-      done()
-    })
-  })
-
-  describe('POST /park, insert a new park with no name', function(){
-    before(function(done){
-      this.requester.post('/park')
-        .send({ details: dummyPark.details, entranceFee: dummyPark.entranceFee })
-        .then((res, err) => {
-          if(err){ console.error(err) }
-          this.requestResult = res
-          done()
-        })
-    })
-
-    it('should return status code 400', function(done){
-      assert.equal(this.requestResult.status, 400)
-      done()
-    })
-  })
-
-  describe('GET /park, get list of parks', function(){
-    before(function(done){
-      this.requester.get('/park')
-        .then((res, err) => {
-          if(err){ console.error(err) }
-          this.requestResult = res
-          done()    
-        })
-    })
-    it('should return status code 200', function(done){
-      assert.equal(this.requestResult.status, 200)
-      done()
-    })
-    it('body should be an object that contains total (number) and parks (array)', function(done){
-      const res = this.requestResult.body
-      assert.isObject(res, "body is not an object")
-      assert.hasAllKeys(res, ["total", "parks"], "body does not have the required keys")
-      assert.typeOf(res.total, "number", "total is not a number")
-      assert.isArray(res.parks, "parks is not an array")
-      done()
-    })
-
-    it('assert each park object inside parks', function(done){
-      if(this.requestResult.body.parks.length != 0){
-        this.requestResult.body.parks.forEach(park => assertIsValidFullParkObject(park))
-      }
-      done()
-    })
-  })
+  describe("POST /park, for inserting a park", function(){
+    describe('POST /park, insert a new park with full information', function(){
+      before(function(done){
+        this.requester.post('/park')
+          .send(dummyPark)
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()
+          })
+      })
   
-  describe('GET /park/:id, get an existing park with an id', function(){
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+  
+      it('should return the id of the inserted park', function(done){
+        assert.isObject(this.requestResult.body, "response is not an object")
+        assert.hasAllKeys(this.requestResult.body, ["id"], "id key does not exist")
+        assert.isNumber(this.requestResult.body.id, "id is not a number")
+        done()
+      })
+    })
+  
+    describe('POST /park, insert a new park with partial information', function(){
+      before(function(done){
+        this.requester.post('/park')
+          .send({ name: dummyPark.name, entranceFee: dummyPark.entranceFee })
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()
+          })
+      })
+  
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+  
+      it('should return the id of the inserted park', function(done){
+        assert.isObject(this.requestResult.body, "response is not an object")
+        assert.hasAllKeys(this.requestResult.body, ["id"], "id key does not exist")
+        assert.isNumber(this.requestResult.body.id, "id is not a number")
+        done()
+      })
+    })
+  
+    describe('POST /park, insert a new park with no name', function(){
+      before(function(done){
+        this.requester.post('/park')
+          .send({ details: dummyPark.details, entranceFee: dummyPark.entranceFee })
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()
+          })
+      })
+  
+      it('should return status code 400', function(done){
+        assert.equal(this.requestResult.status, 400)
+        done()
+      })
+    })
+  })
+
+  describe("GET /park, for retrieving a park(s)", function(){
+    describe('GET /park, get list of parks', function(){
+      before(function(done){
+        this.requester.get('/park')
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()    
+          })
+      })
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+      it('body should be an object that contains total (number) and parks (array)', function(done){
+        const res = this.requestResult.body
+        assert.isObject(res, "body is not an object")
+        assert.hasAllKeys(res, ["total", "parks"], "body does not have the required keys")
+        assert.typeOf(res.total, "number", "total is not a number")
+        assert.isArray(res.parks, "parks is not an array")
+        done()
+      })
+  
+      it('assert each park object inside parks', function(done){
+        if(this.requestResult.body.parks.length != 0){
+          this.requestResult.body.parks.forEach(park => assertIsValidFullParkObject(park))
+        }
+        done()
+      })
+    })
+    
+    describe('GET /park/:id, get an existing park with an id', function(){
+      before(async function(){
+        await this.requester.post("/park").send(dummyPark).then((res, err) => {
+          this.idToBeTested = res.body.id
+        })
+        await this.requester.get("/park/" + this.idToBeTested).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+  
+      it('should return a full park object with dummy park information', function(done){
+        assertDummyPark(this.requestResult.body)
+        done()
+      })
+    })
+  
+    describe('GET /park/:id, try to get a nonexistant park id', function(){
+      before(async function(){
+        await this.requester.get("/park/-1").then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 404', function(done){
+        assert.equal(this.requestResult.status, 404)
+        done()
+      })
+    })
+  
+    describe('GET /park/:id, try to use an invalid id (non-numeric)', function(){
+      before(async function(){
+        await this.requester.get("/park/bcc").then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 400', function(done){
+        assert.equal(this.requestResult.status, 400)
+        done()
+      })
+    })
+  })
+
+  describe('PATCH /park/:id, for editing parks', function(){
     before(async function(){
-      await this.requester.post("/park").send(dummyPark).then((res, err) => {
+      await this.requester.post('/post').send(dummyPark).then((res, err) => {
         this.idToBeTested = res.body.id
       })
-      await this.requester.get("/park/" + this.idToBeTested).then((res, err) => {
-        this.requestResult = res
+    })
+
+    describe("edit a park's name", function(){
+      before(async function(){
+        await this.requester.patch('/post/:id').send({ id: this.idToBeTested, name: "Integration Testing Park #2"}).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return the id and the current name of the edited park', function(done){
+        assert.isObject(this.requestResult.body)
+        assert.hasAllKeys(this.requestResult.body, ["id", "name"], "body does not have the required keys")
+        assert.equal(this.requestResult.body.id, this.idToBeTested, "id returned does not match the id given")
+        assert.equal(this.requestResult.body.name, "Integration Testing Park #2", "name returned does not match the name given")
       })
     })
 
-    it('should return status code 200', function(done){
-      assert.equal(this.requestResult.status, 200)
-      done()
-    })
+    describe("edit a park's details", function(){
+      before(async function(){
+        await this.requester.patch('/post/:id').send({ id: this.idToBeTested, details: "UUHHH testing..."}).then((res, err) => {
+          this.requestResult = res
+        })
+      })
 
-    it('should return a full park object with dummy park information', function(done){
-      assertDummyPark(this.requestResult.body)
-      done()
-    })
-  })
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
 
-  describe('GET /park/:id, try to get a nonexistant park id', function(){
-    before(async function(){
-      await this.requester.get("/park/-1").then((res, err) => {
-        this.requestResult = res
+      it('should return the id and the current details of the edited park', function(done){
+        assert.isObject(this.requestResult.body)
+        assert.hasAllKeys(this.requestResult.body, ["id", "details"], "body does not have the required keys")
+        assert.equal(this.requestResult.body.id, this.idToBeTested, "id returned does not match the id given")
+        assert.equal(this.requestResult.body.details, "UUHHH testing...", "details returned does not match the details given")
       })
     })
 
-    it('should return status code 404', function(done){
-      assert.equal(this.requestResult.status, 404)
-      done()
-    })
-  })
-
-  describe('GET /park/:id, try to use an invalid id (non-numeric)', function(){
-    before(async function(){
-      await this.requester.get("/park/bcc").then((res, err) => {
-        this.requestResult = res
+    describe("edit a park's entrance fee", function(){
+      before(async function(){
+        await this.requester.patch('/post/:id').send({ id: this.idToBeTested, entranceFee: 360420 }).then((res, err) => {
+          this.requestResult = res
+        })
       })
-    })
 
-    it('should return status code 400', function(done){
-      assert.equal(this.requestResult.status, 400)
-      done()
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return the id and the current entrance fee of the edited park', function(done){
+        assert.isObject(this.requestResult.body)
+        assert.hasAllKeys(this.requestResult.body, ["id", "entranceFee"], "body does not have the required keys")
+        assert.equal(this.requestResult.body.id, this.idToBeTested, "id returned does not match the id given")
+        assert.equal(this.requestResult.body.entranceFee, 360420, "entranceFee returned does not match the entranceFee given")
+      })
     })
   })
 
