@@ -175,6 +175,7 @@ describe("/park endpoint", function () {
   })
 
   describe('PATCH /park/:id, for editing parks', function(){
+    const modifiedPark = { name: "Integration Testing Park #2", details: "UUHHH testing...", entranceFee: 360420 }
     before(async function(){
       await this.requester.post('/park').send(dummyPark).then((res, err) => {
         this.idToBeTested = res.body.id
@@ -183,7 +184,7 @@ describe("/park endpoint", function () {
 
     describe("edit a park's name", function(){
       before(async function(){
-        await this.requester.patch('/park/' + this.idToBeTested).send({ name: "Integration Testing Park #2"}).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).send({ name: modifiedPark.name }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -196,14 +197,14 @@ describe("/park endpoint", function () {
       it('should return the current name of the edited park', function(done){
         assert.isObject(this.requestResult.body)
         assert.hasAllKeys(this.requestResult.body, ["name"], "body does not have the required keys")
-        assert.equal(this.requestResult.body.name, "Integration Testing Park #2", "name returned does not match the name given")
+        assert.equal(this.requestResult.body.name, modifiedPark.name, "name returned does not match the name given")
         done()
       })
     })
 
     describe("edit a park's details", function(){
       before(async function(){
-        await this.requester.patch('/park/' + this.idToBeTested).send({ details: "UUHHH testing..."}).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).send({ details: modifiedPark.details }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -216,14 +217,14 @@ describe("/park endpoint", function () {
       it('should return the current details of the edited park', function(done){
         assert.isObject(this.requestResult.body)
         assert.hasAllKeys(this.requestResult.body, ["details"], "body does not have the required keys")
-        assert.equal(this.requestResult.body.details, "UUHHH testing...", "details returned does not match the details given")
+        assert.equal(this.requestResult.body.details, modifiedPark.details, "details returned does not match the details given")
         done()
       })
     })
 
     describe("edit a park's entrance fee", function(){
       before(async function(){
-        await this.requester.patch('/park/' + this.idToBeTested).send({ entranceFee: 360420 }).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).send({ entranceFee: modifiedPark.entranceFee }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -236,7 +237,28 @@ describe("/park endpoint", function () {
       it('should return the current entrance fee of the edited park', function(done){
         assert.isObject(this.requestResult.body)
         assert.hasAllKeys(this.requestResult.body, ["entranceFee"], "body does not have the required keys")
-        assert.equal(this.requestResult.body.entranceFee, 360420, "entranceFee returned does not match the entranceFee given")
+        assert.equal(this.requestResult.body.entranceFee, modifiedPark.entranceFee, "entranceFee returned does not match the entranceFee given")
+        done()
+      })
+    })
+
+    describe("check the edited park with GET /park/:id", function(){
+      before(async function(){
+        await this.requester.get('/park/' + this.idToBeTested).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it("the park that's returned by /park/:id should match all the modifications done in the tests above", function(done){
+        const park = this.requestResult.body
+        assert.equal(park.name, modifiedPark.name, "park name is different")
+        assert.equal(park.details, modifiedPark.details, "park details is different")
+        assert.equal(park.entranceFee, modifiedPark.entranceFee, "park entranceFee is different")
         done()
       })
     })
