@@ -253,6 +253,32 @@ describe('/user endpoints', function(){
           })
         })
       })
+
+      describe('POST /user/balance/topup, for topping up user balance', function(){
+        describe('top up self balance (token provided)', function(){
+          const topupAmount = 42000
+          before(async function() {
+            this.initialUserBalance = (await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance
+            await this.requester.post(url + "/balance/topup").set("Authorization", "Bearer " + this.tokenToBeTested).send({ amount: topupAmount }).then((res, err) => {
+              this.requestResult = res
+            })
+          })
+
+          it('should return status code 200', function(done){
+            assert.equal(this.requestResult.status, 200)
+            done()
+          })
+
+          it('should return the current balance for the user', function(done){
+            assert.equal(this.requestResult.body.balance, topupAmount + this.initialUserBalance)
+            done()
+          })
+
+          it('balance update should be reflected in the db', async function(){
+            assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, topupAmount + this.initialUserBalance)
+          })
+        })
+      })
     })
   })
 })
