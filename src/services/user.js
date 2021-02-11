@@ -34,6 +34,16 @@ async function deleteUser(id){
   await db('users').where({ id: id }).delete()
 }
 
+async function getUserInvoices(userId){
+  const invoicesRaw = await db('park_visits').leftJoin("parks", "parks.id", "park_visits.park_id").select(["park_visits.id", "park_visits.id as park_id", "parks.name", "park_visits.entranceFeeOnVisit", "park_visits.visitedOn"]).where({ userId: userId })
+  const invoices = invoicesRaw.map(invoice => {
+    const park = { id: invoice.parkId, name: invoice.name, isParkDeleted: (invoice.name == null)? true : false }
+    return { id: invoice.id, entranceFeeOnVisit: invoice.entranceFeeOnVisit, visitedOn: invoice.visitedOn, park: park }
+  })
+  const totalSpent = invoices.reduce((acc, invoice) => acc + invoice.entranceFeeOnVisit, 0)
+  return { totalSpent: totalSpent, totalInvoices: invoices.length, invoices: invoices }
+}
+
 module.exports = {
   LEVEL_VISITOR,
   LEVEL_ADMIN,
@@ -41,5 +51,6 @@ module.exports = {
   getUserById,
   setUserBalance,
   topupUserBalance,
-  deleteUser
+  deleteUser,
+  getUserInvoices
 }

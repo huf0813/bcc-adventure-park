@@ -109,7 +109,6 @@ module.exports = async (fastify, opts, done) => {
           message: "Park ID should be a number"
         })
       }
-      console.log("req visit")
 
       try {
         const finalBalance = await parkService.visitPark(req.params.id, req.session.id)

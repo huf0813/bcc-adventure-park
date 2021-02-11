@@ -233,4 +233,36 @@ module.exports = async (fastify, opts, done) => {
       rep.send({ balance: remainingBalance, message: "success" })
     }
   })
+
+  fastify.route({
+    method: 'GET',
+    url: '/invoice',
+    schema: {
+      response: {
+        200: {
+          type: "object",
+          required: ["totalSpent", "totalInvoices", "invoices"],
+          properties: {
+            totalSpent: { type: "number" },
+            totalInvoices: { type: "number" },
+            invoices: { type: "array" }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      rep.send(await userService.getUserInvoices(req.session.id))
+    }
+  })
 }
