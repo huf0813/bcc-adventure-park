@@ -19,6 +19,7 @@ module.exports = async (fastify, opts, done) => {
       response: {
         200: {
           type: 'object',
+          required: ["message", "id"],
           properties: {
             message: { type: "string" },
             id: { type: "number" },
