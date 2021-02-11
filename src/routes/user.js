@@ -40,8 +40,10 @@ module.exports = async (fastify, opts, done) => {
     },
     handler: async (req, rep) => {
       try {
-        const userId = await userService.addUser({ email: req.body.email, pass: req.body.pass, name: req.body.name })
-        if(req.body.token){
+        const generateToken = req.body.token
+        delete req.body.token
+        const userId = await userService.addUser(req.body)
+        if(generateToken){
           const token = await authService.generateToken(userId)
           rep.send({
             message: "success",

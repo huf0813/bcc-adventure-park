@@ -3,10 +3,17 @@ const db = require('../utils/db')
 
 const LEVEL_VISITOR = "visitor"
 const LEVEL_ADMIN = "admin"
+const defaultUserObject = {
+  email: "",
+  name: "",
+  pass: "",
+  balance: 0,
+  level: LEVEL_VISITOR,
+}
 
-async function addUser({ email, pass, name }){
-  const hashedPass = await bcrypt.hash(pass, 10)
-  return await db('users').insert({ email: email, name: name, pass: hashedPass, level: LEVEL_VISITOR })
+async function addUser(user){
+  const hashedPass = await bcrypt.hash(user.pass, 10)
+  return await db('users').insert({ ...defaultUserObject, ...user, pass: hashedPass })
 }
 
 async function getUserById(id){
