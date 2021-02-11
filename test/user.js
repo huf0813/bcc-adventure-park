@@ -7,6 +7,9 @@ const db = require('../src/utils/db')
 const session = require('../src/utils/session')
 
 const newUser = { email: "izf@izfaruqi.com", pass: "Tr0ub4dor&3", name: "izfaruqi" }
+const dummyPark1 = { name: "Integration Testing Park #1", details: "Very fun park #1", entranceFee: 111111 }
+const dummyPark2 = { name: "Integration Testing Park #2", details: "Very fun park #2", entranceFee: 222222 }
+const dummyPark3 = { name: "Integration Testing Park #3", details: "Very fun park #3", entranceFee: 333333 }
 
 function assertValidTokenObject(token){
   assert.isObject(token, "token is not an object")
@@ -279,6 +282,39 @@ describe('/user endpoints', function(){
           it('balance update should be reflected in the db', async function(){
             assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, topupAmount + this.initialUserBalance)
           })
+        })
+      })
+    })
+
+    describe('/user/invoice, for actions regarding user invoices', function(){
+      before(async function() {
+        await db('park_visits').delete()
+        await db('parks').delete()
+        await this.requester.post("/park").send(dummyPark1)
+        await this.requester.post("/park").send(dummyPark1)
+        await this.requester.post("/park").send(dummyPark1)
+        await this.requester.post(url + "/balance").set("Authorization", this.tokenToBeTested).send({ balance: 6666666 })
+      })
+
+      describe('GET /user/invoice, for getting a list of all invoices from self', function(){
+        before(async function(){
+          await this.requester.get(url + "/invoice").set("Authorization", this.tokenToBeTested).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
+
+        it('should return the total balance spent and the list of invoices', function(done){
+          const res = this.requestResult.body
+          assert.isObject(res)
+          assert.hasAllKeys(res, ["totalSpent", "totalInvoices", "invoices"])
+          assert.isNumber(res.totalSpent)
+          assert.isNumber(res.totalInvoices)
+          assert.isArray(res.invoices)
         })
       })
     })
