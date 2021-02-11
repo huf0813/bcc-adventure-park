@@ -297,7 +297,7 @@ describe('/user endpoints', function(){
 
     describe('delete self (token provided)', function(){
       before(async function(){
-        await this.requester.delete(url).then((res, err) => {
+        await this.requester.delete(url).set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -314,8 +314,8 @@ describe('/user endpoints', function(){
       })
 
       it('token and user should no longer exist in db', async function(){
-        assert.isNull(await db('users').where({ id: this.idToBeTested }).select("*").first(), "user still exists on db")
-        assert.isNull(await session.get(this.tokenToBeTested), "token is still valid")
+        assert.isUndefined(await db('users').where({ id: this.idToBeTested }).select("*").first(), "user still exists on db")
+        assert.isUndefined(await session.get(this.tokenToBeTested), "token is still valid")
       })
     })
   })
