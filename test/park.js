@@ -4,6 +4,7 @@ const assert = chai.assert;
 
 chai.use(chaiHttp)
 const db = require('../src/utils/db')
+const session = require('../src/utils/session')
 
 function assertIsValidFullParkObject(park){
   assert.isObject(park, "park is not an object")
