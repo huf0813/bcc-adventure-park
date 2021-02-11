@@ -7,12 +7,12 @@ const db = require('../src/utils/db')
 
 const newUser = { email: "izf@izfaruqi.com", pass: "Tr0ub4dor&3" }
 
-describe('/auth endpoints', function(){
-  describe('POST /auth/register, for registering new users', function(){
+describe('/user endpoints', function(){
+  describe('POST /user, for registering new users', function(){
     describe('insert a new user with an email and a password', function(){
       before(async function(){
         await db('users').delete()
-        await this.requester.post('/auth/register').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+        await this.requester.post('/user').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -37,7 +37,7 @@ describe('/auth endpoints', function(){
     describe('try to insert a new user with only an email', function(){
       before(async function(){
         await db('users').delete()
-        await this.requester.post('/auth/register').send({ email: newUser.email }).then((res, err) => {
+        await this.requester.post('/user').send({ email: newUser.email }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -51,7 +51,7 @@ describe('/auth endpoints', function(){
     describe('try to insert a new user with only a password', function(){
       before(async function(){
         await db('users').delete()
-        await this.requester.post('/auth/register').send({ pass: newUser.pass }).then((res, err) => {
+        await this.requester.post('/user').send({ pass: newUser.pass }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -65,9 +65,9 @@ describe('/auth endpoints', function(){
     describe('try to insert a user with an email that already exists in the db', function(){
       before(async function(){
         await db('users').delete()
-        await this.requester.post('/auth/register').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+        await this.requester.post('/user').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
         })
-        await this.requester.post('/auth/register').send({ email: newUser.email, pass: newUser.pass + "_its_a_different_pass_now" }).then((res, err) => {
+        await this.requester.post('/user').send({ email: newUser.email, pass: newUser.pass + "_its_a_different_pass_now" }).then((res, err) => {
           this.requestResult = res
         })
       })

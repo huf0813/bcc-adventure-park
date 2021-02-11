@@ -1,9 +1,9 @@
-const authService = require('../services/auth')
+const userService = require('../services/user')
 
 module.exports = async (fastify, opts, done) => {
   fastify.route({
     method: 'POST',
-    url: '/register',
+    url: '/',
     schema: {
       body: {
         type: 'object',
@@ -32,7 +32,7 @@ module.exports = async (fastify, opts, done) => {
     },
     handler: async (req, rep) => {
       try {
-        await authService.addUser(req.body)
+        await userService.addUser(req.body)
         rep.send({ message: "success" })
       } catch (e) {
         rep.code(403)
@@ -40,4 +40,5 @@ module.exports = async (fastify, opts, done) => {
       }
     }
   })
+
 }
