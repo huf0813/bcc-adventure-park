@@ -382,6 +382,47 @@ describe("/park endpoints", function () {
     })
   })
 
+  describe('GET /park/:id/visit, for visiting a park', function(){
+    const newUser = { email: "izf@izfaruqi.com", pass: "Tr0ub4dor&3", name: "izfaruqi" }
+
+    before(async function(){
+      await db('park_visits').delete()
+      await db('users').delete()
+      await db('parks').delete()
+      await session.clear()
+      await this.requester.post("/user/register").send({ ...newUser, token: true }).then((res, err) => {
+        this.idUserToBeTested = res.body.id
+        this.tokenToBeTested = res.body.token.token
+      })
+      await this.requester.post('/park').send(dummyPark).then((res, err) => {
+        this.idParkToBeTested = res.body.id
+      })
+    })
+
+    it('visit a park as a valid registered user with sufficient balance', function(){
+      before(async function(){
+        await this.requester.get('/park/' + this.idParkToBeTested + "/visit").then((res, err) => {
+          this.requestResult = res.body.id
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return spent balance, current balance, and a message', function(done){
+        const resBody = this.requestResult.body
+        assert.isObject(resBody)
+        assert.hasAllKeys(resBody, ["balance", "message"])
+        assert.hasAllKeys(resBody.balance, ["spent", "current"])
+        assert.isNumber(resBody.balance.spent)
+        assert.isNumber(resBody.balance.current)
+        done()
+      })
+    })
+  })
+
   after(function(done){
     db('parks').delete().then(() => done())
   })
