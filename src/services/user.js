@@ -24,10 +24,17 @@ async function setUserBalance(id, newBalance){
   return await db('users').where({ id: id }).update({ balance: newBalance })
 }
 
+async function topupUserBalance(id, topupAmount){
+  const initialUserBalance = (await getUserById(id)).balance
+  await setUserBalance(id, initialUserBalance + topupAmount)
+  return initialUserBalance + topupAmount
+}
+
 module.exports = {
   LEVEL_VISITOR,
   LEVEL_ADMIN,
   addUser,
   getUserById,
-  setUserBalance
+  setUserBalance,
+  topupUserBalance
 }

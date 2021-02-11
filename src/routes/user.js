@@ -160,4 +160,42 @@ module.exports = async (fastify, opts, done) => {
       rep.send({ balance: req.body.balance })
     }
   })
+
+  fastify.route({
+    method: 'POST',
+    url: '/balance/topup',
+    schema: {
+      body: {
+        type: 'object',
+        required: ['amount'],
+        properties: {
+          amount: { type: "number" }
+        }
+      },
+      response: {
+        200: {
+          type: "object",
+          required: ["balance"],
+          properties: {
+            balance: { type: "number" }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      const newBalance = await userService.topupUserBalance(req.session.id, req.body.amount)
+      rep.send({ balance: newBalance })
+    }
+  })
 }
