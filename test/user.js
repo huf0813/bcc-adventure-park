@@ -16,7 +16,7 @@ function assertValidTokenObject(token){
 }
 
 describe('/user endpoints', function(){
-  describe('POST /user, for registering new users', function(){
+  describe('POST /user/register, for registering new users', function(){
     const url = "/user/register"
     describe('insert a new user with an email and a password', function(){
       before(async function(){
@@ -31,8 +31,9 @@ describe('/user endpoints', function(){
         done()
       })
   
-      it('should only return a success message', function(done){
-        assert.hasAllKeys(this.requestResult.body, ["message"], "body does not have the required keys")
+      it('should return a success message and the new user id', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["message", "id"], "body does not have the required keys")
+        assert.isNumber(this.requestResult.body.id)
         assert.equal(this.requestResult.body.message, "success", "message returned is not success")
         done()
       })
@@ -56,8 +57,9 @@ describe('/user endpoints', function(){
         done()
       })
   
-      it('should return a token and a success message', function(done){
-        assert.hasAllKeys(this.requestResult.body, ["message", "token"], "body does not have the required keys")
+      it('should return a token, the new user id, and a success message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["message", "token", "id"], "body does not have the required keys")
+        assert.isNumber(this.requestResult.body.id)
         assert.equal(this.requestResult.body.message, "success", "message returned is not success")
         assertValidTokenObject(this.requestResult.body.token)
         done()
@@ -122,4 +124,6 @@ describe('/user endpoints', function(){
       })
     })
   })
+
+
 })

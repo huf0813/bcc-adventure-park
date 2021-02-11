@@ -20,6 +20,7 @@ module.exports = async (fastify, opts, done) => {
           type: 'object',
           properties: {
             message: { type: "string" },
+            id: { type: "number" },
             token: { type: "object", properties: {
               token: { type: "string" },
               expiresAt: { type: "number" }
@@ -43,10 +44,11 @@ module.exports = async (fastify, opts, done) => {
           const token = await authService.generateToken(userId)
           rep.send({
             message: "success",
+            id: userId,
             token: token
           })
         }
-        rep.send({ message: "success" })
+        rep.send({ message: "success", id: userId })
       } catch (e) {
         rep.code(403)
         rep.send({ error: "EMAIL_EXISTS", message: "A user with that email already exists"})
