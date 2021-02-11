@@ -3,7 +3,7 @@ const userService = require('../services/user')
 module.exports = async (fastify, opts, done) => {
   fastify.route({
     method: 'POST',
-    url: '/',
+    url: '/register',
     schema: {
       body: {
         type: 'object',
@@ -40,5 +40,4 @@ module.exports = async (fastify, opts, done) => {
       }
     }
   })
-
 }
