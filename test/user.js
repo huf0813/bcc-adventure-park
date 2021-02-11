@@ -210,7 +210,7 @@ describe('/user endpoints', function(){
 
     describe('/user/balance endpoints, for actions regarding user balance', function(){
       describe('GET /user/balance, for getting user balance', function(){
-        describe('get user balance (token provided)', function(){
+        describe('get self balance (token provided)', function(){
           before(async function() {
             await this.requester.get(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
               this.requestResult = res
@@ -225,6 +225,31 @@ describe('/user endpoints', function(){
           it('balance should be 0 for new users', function(done){
             assert.equal(this.requestResult.body.balance, 0)
             done()
+          })
+        })
+      })
+
+      describe('POST /user/balance, for setting user balance', function(){
+        describe('set self balance (token provided)', function(){
+          const newBalance = 133700
+          before(async function() {
+            await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: newBalance }).then((res, err) => {
+              this.requestResult = res
+            })
+          })
+
+          it('should return status code 200', function(done){
+            assert.equal(this.requestResult.status, 200)
+            done()
+          })
+
+          it('should return the current balance for the user', function(done){
+            assert.equal(this.requestResult.body.balance, newBalance)
+            done()
+          })
+
+          it('balance update should be reflected in the db', async function(){
+            assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, newBalance)
           })
         })
       })

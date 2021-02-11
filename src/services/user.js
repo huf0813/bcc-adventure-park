@@ -20,9 +20,14 @@ async function getUserById(id){
   return await db('users').select(["id", "email", "name", "level", "balance"]).where({ id: id }).first()
 }
 
+async function setUserBalance(id, newBalance){
+  return await db('users').where({ id: id }).update({ balance: newBalance })
+}
+
 module.exports = {
   LEVEL_VISITOR,
   LEVEL_ADMIN,
   addUser,
-  getUserById
+  getUserById,
+  setUserBalance
 }
