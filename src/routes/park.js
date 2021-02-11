@@ -68,6 +68,66 @@ module.exports = async (fastify, opts, done) => {
       rep.send({ ...insertedPark })
     }
   })
+  
+  fastify.route({
+    method: 'GET',
+    url: '/:id/visit',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          required: ['balance', 'message'],
+          properties: {
+            message: { type: 'string' },
+            balance: {
+              type: 'object',
+              properties: {
+                spent: { type: 'number' },
+                current: { type: 'number' }
+              }
+            }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      if(isNaN(parseInt(1))){
+        rep.code(400)
+        rep.send({
+          error: "Bad Request",
+          message: "Park ID should be a number"
+        })
+      }
+      console.log("req visit")
+
+      try {
+        const finalBalance = await parkService.visitPark(req.params.id, req.session.id)
+        rep.send({
+          message: "Have fun :D",
+          ...finalBalance
+        })
+      } catch (e){
+        if(e.name == "VISIT_INSUFFICIENT_BALANCE"){
+          rep.code(403)
+          rep.send(e)
+        } else {
+          rep.code(500)
+          rep.send(e)
+        }
+      }
+    }
+  }) 
 
   fastify.route({
     method: 'GET',
@@ -215,4 +275,6 @@ module.exports = async (fastify, opts, done) => {
       })
     }
   })
+
+  
 }
