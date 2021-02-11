@@ -4,6 +4,7 @@ const assert = chai.assert;
 
 chai.use(chaiHttp)
 const db = require('../src/utils/db')
+const session = require('../src/utils/session')
 
 const newUser = { email: "izf@izfaruqi.com", pass: "Tr0ub4dor&3" }
 
@@ -63,8 +64,12 @@ describe('/user endpoints', function(){
       })
   
       it('new user should be available in the db', async function(){
-          const userFromDb = await db('users').select("*").where({ email: newUser.email }).first()
-          assert.isDefined(userFromDb, "new user not found in the db")
+        const userFromDb = await db('users').select("*").where({ email: newUser.email }).first()
+        assert.isDefined(userFromDb, "new user not found in the db")
+      })
+
+      it('token should be valid', async function(){
+        assert.isNotNull(await session.get(this.requestResult.body.token.token))
       })
     })
 
