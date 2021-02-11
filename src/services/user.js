@@ -6,7 +6,7 @@ const LEVEL_ADMIN = "admin"
 
 async function addUser({ email, pass }){
   const hashedPass = await bcrypt.hash(pass, 10)
-  await db('users').insert({ email: email, pass: hashedPass, level: LEVEL_VISITOR })
+  return await db('users').insert({ email: email, pass: hashedPass, level: LEVEL_VISITOR })
 }
 
 module.exports = {
