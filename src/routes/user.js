@@ -198,4 +198,36 @@ module.exports = async (fastify, opts, done) => {
       rep.send({ balance: newBalance })
     }
   })
+
+  fastify.route({
+    method: 'DELETE',
+    url: '/',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          required: ["message"],
+          properties: {
+            message: { type: "string" }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      await userService.deleteUser(req.session.id)
+      await authService.invalidateToken(req.session.token)
+      rep.send({ message: "success" })
+    }
+  })
 }

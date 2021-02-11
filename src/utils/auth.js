@@ -15,6 +15,7 @@ async function verifyToken(req, rep, done){
   const sessionData = await session.get(token)
   if(sessionData != null){
     req.session = sessionData
+    req.session.token = token
     done()
   } else {
     done(new Error(ERR_INVALID_TOKEN))

@@ -30,11 +30,16 @@ async function topupUserBalance(id, topupAmount){
   return initialUserBalance + topupAmount
 }
 
+async function deleteUser(id){
+  await db('users').where({ id: id }).delete()
+}
+
 module.exports = {
   LEVEL_VISITOR,
   LEVEL_ADMIN,
   addUser,
   getUserById,
   setUserBalance,
-  topupUserBalance
+  topupUserBalance,
+  deleteUser
 }

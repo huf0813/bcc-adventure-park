@@ -13,7 +13,18 @@ async function generateToken(userId){
   return { token: token, expiresAt: expiresAt }
 }
 
+async function invalidateToken(token){
+  try {
+    await session.delete(token)
+  } catch (e){
+
+  } finally {
+    return
+  }
+}
+
 module.exports = {
   TOKEN_LIFESPAN,
-  generateToken
+  generateToken,
+  invalidateToken
 }
