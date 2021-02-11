@@ -21,6 +21,7 @@ describe('/user endpoints', function(){
     describe('insert a new user with an email, password, and name', function(){
       before(async function(){
         await db('users').delete()
+        await session.clear()
         await this.requester.post(url).send({ email: newUser.email, pass: newUser.pass, name: newUser.name }).then((res, err) => {
           this.requestResult = res
         })
@@ -145,6 +146,7 @@ describe('/user endpoints', function(){
     const url = "/user"
     before(async function(){
       await db('users').delete()
+      await session.clear()
       await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
         this.idToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
@@ -278,6 +280,42 @@ describe('/user endpoints', function(){
             assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, topupAmount + this.initialUserBalance)
           })
         })
+      })
+    })
+  })
+
+  describe('DELETE /user, for deleting user tied to provided token', function(){
+    const url = "/user"
+    before(async function(){
+      await db('users').delete()
+      await session.clear()
+      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+        this.idToBeTested = res.body.id
+        this.tokenToBeTested = res.body.token.token
+      })
+    })
+
+    describe('delete self (token provided)', function(){
+      before(async function(){
+        await this.requester.delete(url).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+  
+      it('should only return a success message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["message"], "body does not have the required keys")
+        assert.equal(this.requestResult.body.message, "success", "message returned is not success")
+        done()
+      })
+
+      it('token and user should no longer exist in db', async function(){
+        assert.isNull(await db('users').where({ id: this.idToBeTested }).select("*").first(), "user still exists on db")
+        assert.isNull(await session.get(this.tokenToBeTested), "token is still valid")
       })
     })
   })
