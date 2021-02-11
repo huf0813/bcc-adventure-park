@@ -41,7 +41,7 @@ describe('/user endpoints', function(){
       it('new user should be available in the db', async function(){
           const userFromDb = await db('users').select(["id", "email", "name"]).where({ email: newUser.email }).first()
           assert.isDefined(userFromDb, "new user not found in the db")
-          assert.include(newUser, userFromDb)
+          assert.include({ id: this.requestResult.body.id, ...newUser}, userFromDb)
       })
     })
 
