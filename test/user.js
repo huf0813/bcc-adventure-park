@@ -125,5 +125,35 @@ describe('/user endpoints', function(){
     })
   })
 
+  describe('GET /user, for getting complete user profile', function(){
+    before(async function(){
+      await db('users').delete()
+      await this.requester.post(url).send({ email: newUser.email, pass: newUser.pass, token: true }).then((res, err) => {
+        this.idToBeTested = res.body.id
+        this.tokenToBeTested = res.body.token.token
+      })
+    })
 
+    describe('get self profile (token provided)', function(){
+      before(async function(){
+        await this.requester.get('/user').header("Authorization", this.tokenToBeTested).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return the same user data as the ones provided', function(done){
+        const returnedUser = this.requestResult.body
+        assert.equal(newUser.id, this.idToBeTested)
+        assert.equal(newUser.email, returnedUser.email)
+        assert.equal(returnedUser.balance, 0)
+        assert.equal(returnedUser.latestToken, this.tokenToBeTested)
+      })
+    })
+
+  })
 })
