@@ -290,15 +290,19 @@ describe('/user endpoints', function(){
       before(async function() {
         await db('park_visits').delete()
         await db('parks').delete()
-        await this.requester.post("/park").send(dummyPark1)
-        await this.requester.post("/park").send(dummyPark1)
-        await this.requester.post("/park").send(dummyPark1)
-        await this.requester.post(url + "/balance").set("Authorization", this.tokenToBeTested).send({ balance: 6666666 })
+        await this.requester.post("/park").send(dummyPark1).then((res, err) => this.dummyPark1Id = res.body.id)
+        await this.requester.post("/park").send(dummyPark2).then((res, err) => this.dummyPark2Id = res.body.id)
+        await this.requester.post("/park").send(dummyPark3).then((res, err) => this.dummyPark3Id = res.body.id)
+        await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 6666666 })
+        await this.requester.get("/park/" + this.dummyPark1Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
+        await this.requester.get("/park/" + this.dummyPark2Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
+        await this.requester.get("/park/" + this.dummyPark3Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
+        await this.requester.delete("/park/" + this.dummyPark2Id)
       })
 
       describe('GET /user/invoice, for getting a list of all invoices from self', function(){
         before(async function(){
-          await this.requester.get(url + "/invoice").set("Authorization", this.tokenToBeTested).then((res, err) => {
+          await this.requester.get(url + "/invoice").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
             this.requestResult = res
           })
         })
@@ -315,6 +319,19 @@ describe('/user endpoints', function(){
           assert.isNumber(res.totalSpent)
           assert.isNumber(res.totalInvoices)
           assert.isArray(res.invoices)
+          done()
+        })
+
+        it('check every invoice object', function(done){
+          this.requestResult.body.invoices.forEach(invoice => {
+            assert.isNumber(invoice.id)
+            assert.isNumber(invoice.visitedOn)
+            assert.isNumber(invoice.entranceFeeOnVisit)
+            assert.hasAllKeys(invoice.park, ["id", "name", "isParkDeleted"])
+            assert.isNumber(invoice.park.id)
+            assert.isBoolean(invoice.park.isParkDeleted)
+          })
+          done()
         })
       })
     })
