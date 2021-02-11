@@ -395,15 +395,16 @@ describe("/park endpoints", function () {
         this.idUserToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
       })
+      await this.requester.post("/user/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 1337000 })
       await this.requester.post('/park').send(dummyPark).then((res, err) => {
         this.idParkToBeTested = res.body.id
       })
     })
 
-    it('visit a park as a valid registered user with sufficient balance', function(){
+    describe('visit a park as a valid registered user with sufficient balance', function(){
       before(async function(){
-        await this.requester.get('/park/' + this.idParkToBeTested + "/visit").then((res, err) => {
-          this.requestResult = res.body.id
+        await this.requester.get('/park/' + this.idParkToBeTested + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+          this.requestResult = res
         })
       })
 
@@ -419,6 +420,25 @@ describe("/park endpoints", function () {
         assert.hasAllKeys(resBody.balance, ["spent", "current"])
         assert.isNumber(resBody.balance.spent)
         assert.isNumber(resBody.balance.current)
+        done()
+      })
+    })
+
+    describe('visit a park as a valid registered user with insufficient balance', function(){
+      before(async function(){
+        await this.requester.post("/user/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 1337 })
+        await this.requester.get('/park/' + this.idParkToBeTested + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 403', function(done){
+        assert.equal(this.requestResult.status, 403)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
       })
     })
