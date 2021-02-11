@@ -293,6 +293,7 @@ describe('/user endpoints', function(){
         this.idToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
       })
+      this.currentUserBalance = (await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance
     })
 
     describe('delete self (token provided)', function(){
@@ -307,8 +308,9 @@ describe('/user endpoints', function(){
         done()
       })
   
-      it('should only return a success message', function(done){
-        assert.hasAllKeys(this.requestResult.body, ["message"], "body does not have the required keys")
+      it("should only return a success message and the user's remaining balance", function(done){
+        assert.hasAllKeys(this.requestResult.body, ["balance", "message"], "body does not have the required keys")
+        assert.equal(this.requestResult.body.balance, this.currentUserBalance)
         assert.equal(this.requestResult.body.message, "success", "message returned is not success")
         done()
       })

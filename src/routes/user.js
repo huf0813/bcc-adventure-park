@@ -206,8 +206,9 @@ module.exports = async (fastify, opts, done) => {
       response: {
         200: {
           type: 'object',
-          required: ["message"],
+          required: ["balance", "message"],
           properties: {
+            balance: { type: "number" },
             message: { type: "string" }
           }
         },
@@ -225,9 +226,10 @@ module.exports = async (fastify, opts, done) => {
       fastify.verifyToken
     ]),
     handler: async (req, rep) => {
+      const remainingBalance = (await userService.getUserById(req.session.id)).balance
       await userService.deleteUser(req.session.id)
       await authService.invalidateToken(req.session.token)
-      rep.send({ message: "success" })
+      rep.send({ balance: remainingBalance, message: "success" })
     }
   })
 }
