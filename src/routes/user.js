@@ -43,7 +43,7 @@ module.exports = async (fastify, opts, done) => {
           const token = await authService.generateToken(userId)
           rep.send({
             message: "success",
-            token: { token: token, expiresAt: 1337 }
+            token: token
           })
         }
         rep.send({ message: "success" })
