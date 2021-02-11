@@ -9,8 +9,13 @@ async function addUser({ email, pass, name }){
   return await db('users').insert({ email: email, name: name, pass: hashedPass, level: LEVEL_VISITOR })
 }
 
+async function getUserById(id){
+  return await db('users').select(["id", "email", "name", "level", "balance"]).where({ id: id }).first()
+}
+
 module.exports = {
   LEVEL_VISITOR,
   LEVEL_ADMIN,
-  addUser
+  addUser,
+  getUserById
 }

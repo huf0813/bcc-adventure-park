@@ -12,6 +12,7 @@ module.exports = async (fastify, opts, done) => {
         properties: {
           email: { type: 'string' },
           pass: { type: 'string' },
+          name: { type: 'string' },
           token: { type: 'boolean' }
         }
       },
@@ -39,7 +40,7 @@ module.exports = async (fastify, opts, done) => {
     },
     handler: async (req, rep) => {
       try {
-        const userId = await userService.addUser({ email: req.body.email, pass: req.body.pass })
+        const userId = await userService.addUser({ email: req.body.email, pass: req.body.pass, name: req.body.name })
         if(req.body.token){
           const token = await authService.generateToken(userId)
           rep.send({
@@ -53,6 +54,40 @@ module.exports = async (fastify, opts, done) => {
         rep.code(403)
         rep.send({ error: "EMAIL_EXISTS", message: "A user with that email already exists"})
       }
+    }
+  })
+
+  fastify.route({
+    method: 'GET',
+    url: '/',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+            email: { type: 'string' },
+            name: { type: 'string' },
+            level: { type: 'string' },
+            balance: { type: 'number'}
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      const user = await userService.getUserById(req.session.id)
+      rep.send(user)
     }
   })
 }
