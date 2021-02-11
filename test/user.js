@@ -190,5 +190,44 @@ describe('/user endpoints', function(){
       })
     })
 
+    describe('get self profile (invalid token)', function(){
+      before(async function(){
+        await this.requester.get(url).set("Authorization", "Bearer 0w0").then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
+
+    describe('/user/balance endpoints, for actions regarding user balance', function(){
+      describe('GET /user/balance, for getting user balance', function(){
+        describe('get user balance (token provided)', function(){
+          before(async function() {
+            await this.requester.get(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+              this.requestResult = res
+            })
+          })
+
+          it('should return status code 200', function(done){
+            assert.equal(this.requestResult.status, 200)
+            done()
+          })
+
+          it('balance should be 0 for new users', function(done){
+            assert.equal(this.requestResult.body.balance, 0)
+            done()
+          })
+        })
+      })
+    })
   })
 })

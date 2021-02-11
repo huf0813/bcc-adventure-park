@@ -92,4 +92,34 @@ module.exports = async (fastify, opts, done) => {
       rep.send(user)
     }
   })
+
+  fastify.route({
+    method: 'GET',
+    url: '/balance',
+    schema: {
+      response: {
+        200: {
+          type: "object",
+          required: ["balance"],
+          properties: {
+            balance: { type: "number" }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      rep.send({ balance: (await userService.getUserById(req.session.id)).balance })
+    }
+  })
 }
