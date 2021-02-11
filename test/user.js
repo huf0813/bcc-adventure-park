@@ -6,7 +6,7 @@ chai.use(chaiHttp)
 const db = require('../src/utils/db')
 const session = require('../src/utils/session')
 
-const newUser = { email: "izf@izfaruqi.com", pass: "Tr0ub4dor&3" }
+const newUser = { email: "izf@izfaruqi.com", pass: "Tr0ub4dor&3", name: "izfaruqi" }
 
 function assertValidTokenObject(token){
   assert.isObject(token, "token is not an object")
@@ -18,10 +18,10 @@ function assertValidTokenObject(token){
 describe('/user endpoints', function(){
   describe('POST /user/register, for registering new users', function(){
     const url = "/user/register"
-    describe('insert a new user with an email and a password', function(){
+    describe('insert a new user with an email, password, and name', function(){
       before(async function(){
         await db('users').delete()
-        await this.requester.post(url).send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+        await this.requester.post(url).send({ email: newUser.email, pass: newUser.pass, name: newUser.name }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -39,8 +39,9 @@ describe('/user endpoints', function(){
       })
   
       it('new user should be available in the db', async function(){
-          const userFromDb = await db('users').select("*").where({ email: newUser.email }).first()
+          const userFromDb = await db('users').select(["id", "email", "name"]).where({ email: newUser.email }).first()
           assert.isDefined(userFromDb, "new user not found in the db")
+          assert.include(newUser, userFromDb)
       })
     })
 
