@@ -88,6 +88,11 @@ describe('/user endpoints', function(){
         assert.equal(this.requestResult.status, 400)
         done()
       })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
     })
 
     describe('try to insert a new user with only a password', function(){
@@ -100,6 +105,11 @@ describe('/user endpoints', function(){
   
       it('should return status code 400', function(done){
         assert.equal(this.requestResult.status, 400)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
       })
     })
@@ -118,6 +128,11 @@ describe('/user endpoints', function(){
         assert.equal(this.requestResult.status, 403)
         done()
       })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
   
       it('no new user should be available in the db', async function(){
           const userFromDb = await db('users').select("*").where({ email: newUser.email })
@@ -130,7 +145,7 @@ describe('/user endpoints', function(){
     const url = "/user"
     before(async function(){
       await db('users').delete()
-      await this.requester.post(url + "/register").send({ email: newUser.email, pass: newUser.pass, token: true }).then((res, err) => {
+      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
         this.idToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
       })
@@ -138,7 +153,7 @@ describe('/user endpoints', function(){
 
     describe('get self profile (token provided)', function(){
       before(async function(){
-        await this.requester.get(url).set("Authorization", this.tokenToBeTested).then((res, err) => {
+        await this.requester.get(url).set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -150,10 +165,28 @@ describe('/user endpoints', function(){
 
       it('should return the same user data as the ones provided', function(done){
         const returnedUser = this.requestResult.body
-        assert.equal(newUser.id, this.idToBeTested)
-        assert.equal(newUser.email, returnedUser.email)
+        assert.equal(returnedUser.id, this.idToBeTested)
+        assert.equal(returnedUser.email, newUser.email)
         assert.equal(returnedUser.balance, 0)
-        assert.equal(returnedUser.latestToken, this.tokenToBeTested)
+        done()
+      })
+    })
+
+    describe('get self profile (token not provided)', function(){
+      before(async function(){
+        await this.requester.get(url).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
       })
     })
 

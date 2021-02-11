@@ -92,6 +92,11 @@ describe("/park endpoints", function () {
         assert.equal(this.requestResult.status, 400)
         done()
       })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
     })
   })
 
@@ -158,6 +163,11 @@ describe("/park endpoints", function () {
         assert.equal(this.requestResult.status, 404)
         done()
       })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
     })
   
     describe('GET /park/:id, try to use an invalid id (non-numeric)', function(){
@@ -169,6 +179,11 @@ describe("/park endpoints", function () {
   
       it('should return status code 400', function(done){
         assert.equal(this.requestResult.status, 400)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
       })
     })
@@ -274,6 +289,11 @@ describe("/park endpoints", function () {
         assert.equal(this.requestResult.status, 404)
         done()
       })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
     })
   
     describe('try to edit with an invalid id (non-numeric)', function(){
@@ -285,6 +305,11 @@ describe("/park endpoints", function () {
   
       it('should return status code 400', function(done){
         assert.equal(this.requestResult.status, 400)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
       })
     })
@@ -331,6 +356,11 @@ describe("/park endpoints", function () {
         assert.equal(this.requestResult.status, 404)
         done()
       })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
     })
 
     describe('try to delete a park by an invalid id (non-numeric)' , function(){
@@ -342,6 +372,11 @@ describe("/park endpoints", function () {
 
       it('should return status code 400', function(done){
         assert.equal(this.requestResult.status, 400)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
       })
     })
