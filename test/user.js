@@ -126,9 +126,10 @@ describe('/user endpoints', function(){
   })
 
   describe('GET /user, for getting complete user profile', function(){
+    const url = "/user"
     before(async function(){
       await db('users').delete()
-      await this.requester.post(url).send({ email: newUser.email, pass: newUser.pass, token: true }).then((res, err) => {
+      await this.requester.post(url + "/register").send({ email: newUser.email, pass: newUser.pass, token: true }).then((res, err) => {
         this.idToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
       })
@@ -136,7 +137,7 @@ describe('/user endpoints', function(){
 
     describe('get self profile (token provided)', function(){
       before(async function(){
-        await this.requester.get('/user').header("Authorization", this.tokenToBeTested).then((res, err) => {
+        await this.requester.get(url).set("Authorization", this.tokenToBeTested).then((res, err) => {
           this.requestResult = res
         })
       })
