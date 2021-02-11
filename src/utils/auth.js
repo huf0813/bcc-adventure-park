@@ -24,7 +24,7 @@ async function verifyToken(req, rep, done){
 async function verifyEmailPassword(req, rep, done){
   const email = req.body.email
   const pass = req.body.pass
-  const userFromDb = await db('users').select(["id", "email", "pass"]).first()
+  const userFromDb = await db('users').select(["id", "email", "pass"]).where({ email: req.body.email }).first()
   const checkEmail = userFromDb.email == email
   const checkPassword = await bcrypt.compare(pass, userFromDb.pass)
 
