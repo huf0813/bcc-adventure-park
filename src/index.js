@@ -2,7 +2,10 @@ const API_VERSION = "0.1.0"
 
 const fastify = require('fastify')()
 
+fastify.register(require('fastify-auth'))
 fastify.register(require('./routes/registerRoutes'))
+fastify.decorate('verifyToken', require('./utils/auth').verifyToken)
+fastify.decorate('verifyEmailPassword', require('./utils/auth').verifyEmailPassword)
 
 if(!(process.env.NODE_ENV == 'test')){
   fastify.listen(420, (err, addr) => {
