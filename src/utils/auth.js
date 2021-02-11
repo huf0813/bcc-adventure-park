@@ -14,7 +14,7 @@ async function verifyToken(req, rep, done){
   const token = bearerRaw.substring(7)
   const sessionData = await session.get(token)
   if(sessionData != null){
-    req.auth.session = sessionData
+    req.session = sessionData
     done()
   } else {
     done(new Error(ERR_INVALID_TOKEN))
@@ -22,13 +22,15 @@ async function verifyToken(req, rep, done){
 }
 
 async function verifyEmailPassword(req, rep, done){
-  const email = req.body.email
   const pass = req.body.pass
   const userFromDb = await db('users').select(["id", "email", "pass"]).where({ email: req.body.email }).first()
-  const checkEmail = userFromDb.email == email
-  const checkPassword = await bcrypt.compare(pass, userFromDb.pass)
+  if(userFromDb == null){
+    done(new Error(ERR_INVALID_EMAILPASS))
 
-  if(checkEmail && checkPassword){
+  }
+  
+  const checkPassword = await bcrypt.compare(pass, userFromDb.pass)
+  if(checkPassword){
     done()
   } else {
     done(new Error(ERR_INVALID_EMAILPASS))
