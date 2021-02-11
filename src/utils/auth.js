@@ -12,7 +12,9 @@ async function verifyToken(req, rep, done){
     done(new Error(ERR_NO_TOKEN_MSG))
   }
   const token = bearerRaw.substring(7)
-  if((await session.get(token)) != null){
+  const sessionData = await session.get(token)
+  if(sessionData != null){
+    req.auth.session = sessionData
     done()
   } else {
     done(new Error(ERR_INVALID_TOKEN))
