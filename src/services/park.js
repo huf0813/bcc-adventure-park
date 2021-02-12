@@ -44,7 +44,13 @@ async function deleteParkById(id, permanent = false){
 
 async function visitPark(parkId, userId){
   return await db.transaction(async trx => {
-    const currentParkEntranceFee = (await trx('parks').where({ id: parkId, isDeleted: 0 }).select("entrance_fee").first()).entranceFee
+    const parkEntranceFeeObj = await trx('parks').where({ id: parkId, isDeleted: 0 }).select("entrance_fee").first()
+    if(parkEntranceFeeObj == null){
+      const err = new Error("Park not found")
+      err.name = "VISIT_PARK_NOT_FOUND"
+      throw err
+    }
+    const currentParkEntranceFee = parkEntranceFeeObj.entranceFee
     const currentUserBalance = (await trx('users').where({ id: userId }).select("balance").first()).balance
 
     if(currentUserBalance >= currentParkEntranceFee){
