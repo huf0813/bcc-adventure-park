@@ -1,0 +1,909 @@
+swagger: "2.0"
+info:
+  description: 
+    |
+    This is the API documentation for Ibrahim Faruqi's attempt for BCC Back-End Instant Pass 2020.
+    There are 2 types of users, admins and visitors. For testing out the API, I have provided a pre-inputted user for each type.
+    ```
+    Admin:
+      Email: admin@bccpark.com
+      Pass: 12345admin
+    Visitor: 
+      Email: visitor@bccpark.com
+      Pass: 12345visitor
+    ```
+    Please use the ```POST /user/token``` endpoint to get the token for these users.
+    
+    To use the token, you should fill the Authorization header with ```Bearer xyz123``` with ```xyz123``` being your token.
+    
+    The green ```Authorize``` button is used for inputting the bearer token when using this Swagger UI. Put whatever you should put in the Authorization header inside the ```value``` box.
+    
+    The default host is set to ```localhost:420```. In the event that the server is not run on that address (perhaps the port is being used), please change the ```host``` setting in ```api_docs.yaml``` to match the running server to use this Swagger UI's request functions.
+  version: "0.1.0"
+  title: "BCC Adventure Park"
+  contact:
+    email: "izf@izfaruqi.com"
+  license:
+    name: "ISC License"
+    url: "https://opensource.org/licenses/ISC"
+host: "localhost:420"
+basePath: "/"
+tags:
+- name: "user"
+  description: "Actions regarding users"
+- name: "park"
+  description: "Actions regarding parks"
+- name: "token_required"
+  description: "Requires a valid token"
+- name: "admin_required"
+  description: "Requires a valid admin token"
+- name: "admin_optional"
+  description: "Does not require a valid admin token, but will have special functions when provided with one."
+schemes:
+- "http"
+paths:
+  /user/register:
+    post:
+      tags:
+      - "user"
+      summary: "Create a new user"
+      description: "Creates a new user with an email and password. ```token``` can be set to true to recieve an auth token for the registered user. ```isAdmin``` can be set to true to make a new admin user."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: 'object'
+          required:
+          - "email"
+          - "pass"
+          properties:
+            id: 
+              type: 'integer'
+            email: 
+              type: 'string'
+            pass: 
+              type: 'string'
+            token: 
+              type: 'string'
+            isAdmin: 
+              type: 'string'
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "id"
+            - "message"
+            properties:
+              id: 
+                type: 'integer'
+              token: 
+                $ref: "#/definitions/Token"
+        400:
+          description: "Incorrect body keys/data types"
+        403:
+          description: "Email already exists"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/:
+    get:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Get self user profile"
+      description: "Gets the full profile of the user tied with the currently provided token.\nRequires a valid token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "id"
+            - "email"
+            - "name"
+            - "level"
+            - "balance"
+            properties:
+              id: 
+                type: "integer"
+              email: 
+                type: "string"
+              name: 
+                type: "string"
+              level: 
+                type: "string"
+              balance: 
+                type: "integer"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Delete self user profile"
+      description: "Deletes the user tied with the currently provided token then returns the remaining balance.\nRequires a valid token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "balance"
+            - "message"
+            properties:
+              balance: 
+                type: "integer"
+              message: 
+                type: "string"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/all:
+    get:
+      tags:
+      - "user"
+      - "admin_required"
+      summary: "Get the list of all users"
+      description: "Gets a list of all users.\nRequires a valid admin token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "totalUsers"
+            - "totalAdmins"
+            - "totalVisitors"
+            - "users"
+            properties:
+              totalUsers: 
+                type: "integer"
+              totalAdmins: 
+                type: "integer"
+              totalVisitors: 
+                type: "integer"
+              users: 
+                type: "array"
+                items:
+                  type: 'object'
+                  required:
+                  - "id"
+                  - "email"
+                  - "name"
+                  - "level"
+                  - "balance"
+                  properties:
+                    id: 
+                      type: "integer"
+                    email: 
+                      type: "string"
+                    name: 
+                      type: "string"
+                    level: 
+                      type: "string"
+                    balance: 
+                      type: "integer"
+        401:
+          description: "Invalid/missing token"
+        403:
+          description: "Not enough privilege"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/{id}:
+    delete:
+      tags:
+      - "user"
+      - "admin_required"
+      summary: "Delete a certain user"
+      description: "Deletes a certain user with the provided ID. Admins cannot delete other admins.\nRequires a valid admin token."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User ID to delete"
+        required: true
+        type: "integer"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation. Returns the remaining balance of the user"
+          schema: 
+            type: 'object'
+            required:
+            - "balance"
+            - "message"
+            properties:
+              balance: 
+                type: "integer"
+              message: 
+                type: "string"
+        400:
+          description: "Invalid user ID format"
+        401:
+          description: "Invalid/missing token or admins can't delete other admins"
+        403:
+          description: "Not enough privilege"
+        404:  
+          description: "User ID not found"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    get:
+      tags:
+      - "user"
+      - "admin_required"
+      summary: "Get full profile of a certain user"
+      description: "Gets the full profile of a certain user with the provided ID.\nRequires a valid admin token."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User ID to delete"
+        required: true
+        type: "integer"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "id"
+            - "email"
+            - "name"
+            - "level"
+            - "balance"
+            properties:
+              id: 
+                type: "integer"
+              email: 
+                type: "string"
+              name: 
+                type: "string"
+              level: 
+                type: "string"
+              balance: 
+                type: "integer"
+        400:
+          description: "Invalid user ID format"
+        401:
+          description: "Invalid/missing token"
+        403:
+          description: "Not enough privilege"
+        404:  
+          description: "User ID not found"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/balance:
+    get:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Get user balance"
+      description: "Gets the balance of the user tied with the currently provided token.\nRequires a valid token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "balance"
+            properties:
+              balance: 
+                type: 'integer'
+        400:
+          description: "Incorrect body keys/data types"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Set user balance"
+      description: "Sets the balance of the user tied with the currently provided token.\nRequires a valid token."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: 'object'
+          required:
+          - "balance"
+          properties:
+            balance: 
+              type: 'integer'
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation. Returns the new balance."
+          schema: 
+            type: 'object'
+            required:
+            - "balance"
+            properties:
+              balance: 
+                type: 'integer'
+        400:
+          description: "Incorrect body keys/data types"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/balance/topup:
+    post:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Tops up user balance"
+      description: "Tops up the balance of the user tied with the currently provided token.\nRequires a valid token."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: 'object'
+          required:
+          - "amount"
+          properties:
+            amount: 
+              type: 'integer'
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation. Returns the new balance."
+          schema: 
+            type: 'object'
+            required:
+            - "balance"
+            properties:
+              balance: 
+                type: 'integer'
+        400:
+          description: "Incorrect body keys/data types"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/token:
+    get:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Get new token for user"
+      description: "Gets a new token for the user tied with the currently provided token. The previous token will be invalidated.\nRequires a valid token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/Token"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Get token for user with email + password (equivalent to login)"
+      description: "Gets a new token for the user tied with the provided email and password. The previous token wil be invalidated.\nRequires a valid token."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: 'object'
+          required:
+          - "email"
+          - "pass"
+          properties:
+            email: 
+              type: 'string'
+            pass: 
+              type: 'string'
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation. Returns the new token."
+          schema: 
+            $ref: "#/definitions/Token"
+        400:
+          description: "Incorrect body keys/data types"
+        401:
+          description: "Invalid username/password"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /user/invoice:
+    get:
+      tags:
+      - "user"
+      - "token_required"
+      summary: "Gets all invoices for user"
+      description: "Gets all invoices for the user tied with the currently provided token.\nRequires a valid token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required: 
+            - "totalSpent"
+            - "totalInvoices"
+            - "invoices"
+            properties:
+              totalSpent:
+                type: "integer"
+              totalInvoices:
+                type: "integer"
+              invoices:
+                type: "array"
+                items: 
+                  type: "object"
+                  required:
+                  - "id"
+                  - "entranceFeeOnVisit"
+                  - "visitedOn"
+                  - "park"
+                  properties:
+                    id:
+                      type: "integer"
+                    entranceFeeOnVisit:
+                      type: "integer"
+                    visitedOn:
+                      type: "integer" 
+                    park:
+                      type: "object"
+                      required:
+                      - "id"
+                      - "name"
+                      - "isParkDeleted"
+                      properties:
+                        id:
+                          type: "integer"
+                        name:
+                          type: "string"
+                        isParkDeleted:
+                          type: "boolean"
+        401:
+          description: "Invalid/missing token"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /park:
+    get:
+      tags:
+      - "park"
+      - "admin_optional"
+      summary: "Get list of all parks"
+      description: "Gets the list of all parks. If a valid admin token is provided, deleted parks will also be included."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation."
+          schema: 
+            type: 'object'
+            required:
+            - "total"
+            - "parks"
+            properties:
+              total: 
+                type: "integer"
+              parks: 
+                type: "array"
+                items: 
+                  type: 'object'
+                  required: 
+                  - "id"
+                  - "name"
+                  - "details"
+                  - "entranceFee"
+                  properties:
+                    id:
+                      type: "integer"
+                    name: 
+                      type: "string"
+                    details:
+                      type: "string"
+                    entranceFee:
+                      type: "integer"
+                    isDeleted:
+                      type: "boolean"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+      - "park"
+      - "admin_required"
+      summary: "Create a new park"
+      description: "Creates a new park with the provided data.\nRequires a valid admin token."
+      produces:
+      - "application/json"
+      security:
+      - bearerToken: []
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: 'object'
+          required:
+          - "name"
+          properties:
+            name: 
+              type: 'string'
+            details: 
+              type: 'string'
+            entranceFee: 
+              type: 'integer'
+      responses:
+        200:
+          description: "Successful operation. Returns the park ID."
+          schema: 
+            type: 'object'
+            required:
+            - "id"
+            properties:
+              id: 
+                type: 'integer'
+        400:
+          description: "Incorrect body keys/data types"
+        401:
+          description: "Invalid/missing token"
+        403:
+          description: "Not enough privilege"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+  /park/{id}:
+    get:
+      tags:
+      - "park"
+      - "admin_optional"
+      summary: "Get full details of a certain park"
+      description: "Gets the full detail of a certain park with the provided ID. If a valid admin token is provided, deleted parks can be queried."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Park ID to query"
+        required: true
+        type: "integer"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "id"
+            - "name"
+            - "details"
+            - "entranceFee"
+            properties:
+              id: 
+                type: "integer"
+              name: 
+                type: "string"
+              details: 
+                type: "string"
+              entranceFee: 
+                type: "integer"
+              isDeleted: 
+                type: "boolean"
+        400:
+          description: "Invalid park ID format"
+        404:  
+          description: "Park ID not found"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+      - "park"
+      - "admin_required"
+      summary: "Edit a park"
+      description: "Edits a park with the provided data.\nRequires a valid admin token."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Park ID to edit"
+        required: true
+        type: "integer"
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: 'object'
+          properties:
+            name: 
+              type: 'string'
+            details: 
+              type: 'string'
+            entranceFee: 
+              type: 'integer'
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation. Returns the edited fields."
+          schema: 
+            type: 'object'
+            properties:
+              name: 
+                type: 'string'
+              details: 
+                type: 'string'
+              entranceFee: 
+                type: 'integer'
+        400:
+          description: "Incorrect body keys/data types or invalid park ID format."
+        401:
+          description: "Invalid/missing token"
+        403:
+          description: "Not enough privilege"
+        404:
+          description: "Park ID not found."
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - "park"
+      - "admin_required"
+      summary: "Delete a certain park"
+      description: "Deletes a certain park with the provided ID. Keep in mind that in default, parks are not permanently deleted, only marked as *deleted*. This is so the invoices stay relevant even when the parks are deleted. To permanently delete a park, set the ```permanent``` query parameter to ```true```. \n Requires a valid admin token."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Park ID to delete"
+        required: true
+        type: "integer"
+      - in: "query"
+        name: "permanent"
+        type: "boolean"
+        description: "Set to permanently delete the park"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "Successful operation."
+          schema: 
+            type: 'object'
+            required:
+            - "message"
+            properties:
+              message: 
+                type: "string"
+        400:
+          description: "Invalid park ID or query string format"
+        401:
+          description: "Invalid/missing token"
+        403:
+          description: "Not enough privilege"
+        404:  
+          description: "Park ID not found"
+        default:
+          description: "General error"  
+          schema: 
+            $ref: "#/definitions/Error"
+  /park/{id}/visit:
+    get:
+      tags:
+      - "park"
+      - "token_required"
+      summary: "Visit a park"
+      description: "Visits a certain park with the provided ID. Will spend the user's balance according to the park's current entrance fee."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Park ID to visit"
+        required: true
+        type: "integer"
+      security:
+      - bearerToken: []
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            type: 'object'
+            required:
+            - "id"
+            - "name"
+            - "details"
+            - "entranceFee"
+            properties:
+              id: 
+                type: "integer"
+              name: 
+                type: "string"
+              details: 
+                type: "string"
+              entranceFee: 
+                type: "integer"
+              isDeleted: 
+                type: "boolean"
+        400:
+          description: "Invalid park ID format"
+        401:
+          description: "Invalid/missing token"
+        403:
+          description: "Insufficient balance"
+        404:  
+          description: "Park ID not found"
+        default:
+          description: "General error"
+          schema: 
+            $ref: "#/definitions/Error"
+securityDefinitions:
+  bearerToken:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Park:
+    type: 'object'
+    required:
+    - "id"
+    - "name"
+    - "details"
+    - "entranceFee"
+    properties:
+      id: 
+        type: "integer"
+      name: 
+        type: "string"
+      details: 
+        type: "string"
+      entranceFee: 
+        type: "integer"
+      isDeleted: 
+        type: "boolean"
+  User:
+    type: 'object'
+    required:
+    - "id"
+    - "email"
+    - "name"
+    - "level"
+    - "balance"
+    properties:
+      id: 
+        type: "integer"
+      email: 
+        type: "string"
+      name: 
+        type: "string"
+      level: 
+        type: "string"
+      balance: 
+        type: "integer"
+  Invoice:
+    type: "object"
+    required:
+    - "id"
+    - "entranceFeeOnVisit"
+    - "visitedOn"
+    - "park"
+    properties:
+      id:
+        type: "integer"
+      entranceFeeOnVisit:
+        type: "integer"
+      visitedOn:
+        type: "integer" 
+      park:
+        type: "object"
+        required:
+        - "id"
+        - "name"
+        - "isParkDeleted"
+        properties:
+          id:
+            type: "integer"
+          name:
+            type: "string"
+          isParkDeleted:
+            type: "boolean"
+  Token:
+    type: 'object'
+    required:
+    - "token"
+    - "expiresAt"
+    properties: 
+      token:
+        type: 'string'
+      expiresAt:
+        type: 'number'
+  Error:
+    type: 'object'
+    required:
+    - "error"
+    - "message"
+    properties: 
+      error:
+        type: 'string'
+      message: 
+        type: 'string'
+        

@@ -8,6 +8,14 @@ fastify
   .decorate('verifyMinAdmin', require('./utils/auth').verifyMinAdmin)
   .register(require('fastify-auth'))
   .after(() => {
+    fastify.register(require('fastify-swagger'), {
+      routePrefix: '/docs',
+      mode: 'static',
+      specification: {
+        path: './specs/api_specs.yaml'
+      },
+      exposeRoute: true
+    })
     fastify.register(require('./routes/registerRoutes'))
   })
 
