@@ -177,8 +177,8 @@ describe("/park endpoints", function () {
           })
       })
   
-      it('should return status code 401', function(done){
-        assert.equal(this.requestResult.status, 401)
+      it('should return status code 400', function(done){
+        assert.equal(this.requestResult.status, 400)
         done()
       })
   
@@ -222,7 +222,7 @@ describe("/park endpoints", function () {
     
     describe('GET /park/:id, get an existing park with an id', function(){
       before(async function(){
-        await this.requester.post("/park").send(dummyPark).then((res, err) => {
+        await this.requester.post("/park").set("Authorization", "Bearer " + this.adminToken).send(dummyPark).then((res, err) => {
           this.idToBeTested = res.body.id
         })
         await this.requester.get("/park/" + this.idToBeTested).then((res, err) => {
@@ -281,14 +281,14 @@ describe("/park endpoints", function () {
   describe('PATCH /park/:id, for editing parks', function(){
     const modifiedPark = { name: "Integration Testing Park #2", details: "UUHHH testing...", entranceFee: 360420 }
     before(async function(){
-      await this.requester.post('/park').send(dummyPark).then((res, err) => {
+      await this.requester.post('/park').set("Authorization", "Bearer " + this.adminToken).send(dummyPark).then((res, err) => {
         this.idToBeTested = res.body.id
       })
     })
 
-    describe("edit a park's name", function(){
+    describe("edit a park's name as an admin", function(){
       before(async function(){
-        await this.requester.patch('/park/' + this.idToBeTested).send({ name: modifiedPark.name }).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).set("Authorization", "Bearer " + this.adminToken).send({ name: modifiedPark.name }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -306,9 +306,9 @@ describe("/park endpoints", function () {
       })
     })
 
-    describe("edit a park's details", function(){
+    describe("edit a park's details as an admin", function(){
       before(async function(){
-        await this.requester.patch('/park/' + this.idToBeTested).send({ details: modifiedPark.details }).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).set("Authorization", "Bearer " + this.adminToken).send({ details: modifiedPark.details }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -326,9 +326,9 @@ describe("/park endpoints", function () {
       })
     })
 
-    describe("edit a park's entrance fee", function(){
+    describe("edit a park's entrance fee as an admin", function(){
       before(async function(){
-        await this.requester.patch('/park/' + this.idToBeTested).send({ entranceFee: modifiedPark.entranceFee }).then((res, err) => {
+        await this.requester.patch('/park/' + this.idToBeTested).set("Authorization", "Bearer " + this.adminToken).send({ entranceFee: modifiedPark.entranceFee }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -367,9 +367,9 @@ describe("/park endpoints", function () {
       })
     })
 
-    describe('try to edit a nonexistant park id', function(){
+    describe('try to edit a nonexistant park id as an admin', function(){
       before(async function(){
-        await this.requester.patch("/park/-1").send({ name: modifiedPark.name }).then((res, err) => {
+        await this.requester.patch("/park/-1").send({ name: modifiedPark.name }).set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -385,9 +385,9 @@ describe("/park endpoints", function () {
       })
     })
   
-    describe('try to edit with an invalid id (non-numeric)', function(){
+    describe('try to edit with an invalid id (non-numeric) as an admin', function(){
       before(async function(){
-        await this.requester.patch("/park/bcc").send({ name: modifiedPark.name }).then((res, err) => {
+        await this.requester.patch("/park/bcc").set("Authorization", "Bearer " + this.adminToken).send({ name: modifiedPark.name }).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -402,17 +402,35 @@ describe("/park endpoints", function () {
         done()
       })
     })
+
+    describe("try to edit a park's name as a non-admin", function(){
+      before(async function(){
+        await this.requester.patch('/park/' + this.idToBeTested).set("Authorization", "Bearer " + this.visitorToken).send({ name: modifiedPark.name }).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
   })
 
   describe('DELETE /park/:id, for deleting a park', function(){
     before(async function(){
-      await this.requester.post('/park').send(dummyPark).then((res, err) => {
+      await this.requester.post('/park').set("Authorization", "Bearer " + this.adminToken).send(dummyPark).then((res, err) => {
         this.idToBeTested = res.body.id
       })
     })
-    describe('delete a park by a valid id', function(){
+    describe('delete a park by a valid id as an admin', function(){
       before(async function(){
-        await this.requester.delete('/park/' + this.idToBeTested).then((res, err) => {
+        await this.requester.delete('/park/' + this.idToBeTested).set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -434,9 +452,9 @@ describe("/park endpoints", function () {
       })
     })
 
-    describe('try to delete a park by a nonexistant id', function(){
+    describe('try to delete a park by a nonexistant id as an admin', function(){
       before(async function(){
-        await this.requester.delete('/park/-1').then((res, err) => {
+        await this.requester.delete('/park/-1').set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
           this.requestResult = res
         })
       })
@@ -452,15 +470,33 @@ describe("/park endpoints", function () {
       })
     })
 
-    describe('try to delete a park by an invalid id (non-numeric)' , function(){
+    describe('try to delete a park by an invalid id (non-numeric) as an admin' , function(){
       before(async function(){
-        await this.requester.delete('/park/bcc').then((res, err) => {
+        await this.requester.delete('/park/bcc').set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
           this.requestResult = res
         })
       })
 
       it('should return status code 400', function(done){
         assert.equal(this.requestResult.status, 400)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
+
+    describe('try to delete a park as a non-admin' , function(){
+      before(async function(){
+        await this.requester.delete('/park/' + this.idToBeTested).set("Authorization", "Bearer " + this.visitorToken).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
         done()
       })
 
@@ -483,8 +519,12 @@ describe("/park endpoints", function () {
         this.idUserToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
       })
+      await this.requester.post("/user/register").send({ ...adminUser, isAdmin: true, token: true }).then((res, err) => {
+        this.adminId = res.body.id
+        this.adminToken = res.body.token.token
+      })
       await this.requester.post("/user/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 1337000 })
-      await this.requester.post('/park').send(dummyPark).then((res, err) => {
+      await this.requester.post('/park').set("Authorization", "Bearer " + this.adminToken).send(dummyPark).then((res, err) => {
         this.idParkToBeTested = res.body.id
       })
     })
@@ -522,6 +562,24 @@ describe("/park endpoints", function () {
 
       it('should return status code 403', function(done){
         assert.equal(this.requestResult.status, 403)
+        done()
+      })
+
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
+
+    describe('visit a park as an unregistered user', function(){
+      before(async function(){
+        await this.requester.get('/park/' + this.idParkToBeTested + "/visit").then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
         done()
       })
 
