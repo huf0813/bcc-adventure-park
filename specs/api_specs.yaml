@@ -3,7 +3,7 @@ info:
   description: 
     |
     This is the API documentation for Ibrahim Faruqi's attempt for BCC Back-End Instant Pass 2020.
-    There are 2 types of users, admins and visitors. For testing out the API, I have provided a pre-inputted user for each type.
+    There are 2 types of users, admins and visitors. For testing out the API, I have provided a pre-inputted user for each type. Several sample parks will also be provided.
     ```
     Admin:
       Email: admin@bccpark.com
