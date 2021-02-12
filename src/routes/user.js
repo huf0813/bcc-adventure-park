@@ -13,7 +13,8 @@ module.exports = async (fastify, opts, done) => {
           email: { type: 'string' },
           pass: { type: 'string' },
           name: { type: 'string' },
-          token: { type: 'boolean' }
+          token: { type: 'boolean' },
+          isAdmin: { type: 'boolean' }
         }
       },
       response: {
@@ -42,7 +43,12 @@ module.exports = async (fastify, opts, done) => {
     handler: async (req, rep) => {
       try {
         const generateToken = req.body.token
+        const isAdmin = req.body.isAdmin
         delete req.body.token
+        delete req.body.isAdmin
+        if(isAdmin){
+          req.body.level = userService.LEVEL_ADMIN
+        }
         const userId = await userService.addUser(req.body)
         if(generateToken){
           const token = await authService.generateToken(userId)
