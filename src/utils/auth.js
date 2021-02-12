@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const ERR_NO_TOKEN_MSG = "Please supply a bearer token"
 const ERR_INVALID_TOKEN = "Invalid token"
 const ERR_INVALID_EMAILPASS = "Invalid email and/or password"
+const ERR_NOT_ENOUGH_PRIVILEGE = "Not enough privilege" 
 
 async function verifyToken(req, rep){
   const bearerRaw = req.headers.authorization
@@ -37,7 +38,16 @@ async function verifyEmailPassword(req, rep){
   }
 }
 
+async function verifyMinAdmin(req, rep){
+  if(req.session.level != "admin"){
+    throw new Error(ERR_NOT_ENOUGH_PRIVILEGE)
+  } else {
+    return
+  }
+}
+
 module.exports = {
   verifyToken,
-  verifyEmailPassword
+  verifyEmailPassword,
+  verifyMinAdmin
 }
