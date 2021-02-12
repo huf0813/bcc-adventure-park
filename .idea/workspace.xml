@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:pr" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a48966db-850c-42a3-b76b-6aeb0c6dbad4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/BCCAdventurePark/src/main/java/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BCCAdventurePark/src/main/java/Model.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/BCCAdventurePark">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/BCCAdventurePark">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BCCAdventurePark" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BCCAdventurePark" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="F:\IntelliJ IDEA Community Edition 2020.2.3\plugins\maven\lib\maven3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1oLIzjBJ5p05h9AHjOHs9UHYyG3" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="jdk.selected.JAVA_MODULE" value="12" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\acer\Documents\GitHub\bcc-adventure-park\BCCAdventurePark" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="BCCAdventurePark.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a48966db-850c-42a3-b76b-6aeb0c6dbad4" name="Default Changelist" comment="" />
+      <created>1613059707707</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1613059707707</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="114" key="#Project_Structure" timestamp="1613117598908">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="440" y="114" key="#Project_Structure/0.0.1920.1080@0.0.1920.1080" timestamp="1613117598908" />
+    <state x="689" y="402" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1613124689925">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="689" y="402" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1080@0.0.1920.1080" timestamp="1613124689925" />
+    <state x="490" y="195" key="DBNavigator.ProjectSettingsDialog" timestamp="1613119700773">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="490" y="195" key="DBNavigator.ProjectSettingsDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1613119700773" />
+    <state x="740" y="295" key="FileChooserDialogImpl" timestamp="1613123791705">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1613123791705" />
+    <state width="1877" height="295" key="GridCell.Tab.0.bottom" timestamp="1613136498762">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1613136498762" />
+    <state width="1877" height="295" key="GridCell.Tab.0.center" timestamp="1613136498762">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1613136498762" />
+    <state width="1877" height="295" key="GridCell.Tab.0.left" timestamp="1613136498762">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1613136498762" />
+    <state width="1877" height="295" key="GridCell.Tab.0.right" timestamp="1613136498762">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1613136498762" />
+    <state x="279" y="130" key="SettingsEditor" timestamp="1613124856701">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="279" y="130" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1613124856701" />
+    <state x="664" y="431" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1613117510489">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="664" y="431" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1920.1080@0.0.1920.1080" timestamp="1613117510489" />
+    <state x="597" y="150" width="1101" height="779" key="new project wizard" timestamp="1613114731918">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="597" y="150" width="1101" height="779" key="new project wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1613114731918" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1613117961388">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1613117961388" />
+  </component>
+</project>
