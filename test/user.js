@@ -567,5 +567,39 @@ describe('/user endpoints', function(){
         assert.isUndefined(await session.get(this.tokenToBeTested), "token is still valid")
       })
     })
+
+    describe('delete other user (as admin)', function(){
+      before(async function(){
+        await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+          this.idToBeTested = res.body.id
+          this.tokenToBeTested = res.body.token.token
+        })
+
+        await this.requester.post(url + "/register").send({ ...newUser, email: "adminDelete@izfaruqi.com", token: true, isAdmin: true }).then((res, err) => {
+          this.adminToken = res.body.token.token
+        })
+
+        await this.requester.delete(url + "/" + this.idToBeTested).set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+  
+      it("should only return a success message and the user's remaining balance", function(done){
+        assert.hasAllKeys(this.requestResult.body, ["balance", "message"], "body does not have the required keys")
+        assert.equal(this.requestResult.body.balance, this.currentUserBalance)
+        assert.equal(this.requestResult.body.message, "success", "message returned is not success")
+        done()
+      })
+
+      it('token and user should no longer exist in db', async function(){
+        assert.isUndefined(await db('users').where({ id: this.idToBeTested }).select("*").first(), "user still exists on db")
+        assert.isUndefined(await session.get(this.tokenToBeTested), "token is still valid")
+      })
+    })
   })
 })
