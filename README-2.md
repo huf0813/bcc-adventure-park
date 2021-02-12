@@ -1,0 +1,145 @@
+## BCC ADVENTURE PARK
+
+Go-Lang Rest API for BCC ADVENTURE PARK with Mysql integration using Gin and GORM.
+This project is a sample project that contains following features :
+
+ - Rest API Server with [Gin Framework](https://github.com/gin-gonic/gin)
+ - Database Integration using [GORM](https://gorm.io/)
+ - JWT Token based with [JWT GO](https://github.com/dgrijalva/jwt-go)
+ - API Docs support using [Postman](https://documenter.getpostman.com/view/14494329/TWDRrKDG)
+
+Test Driven Development :
+
+ ```
+ AUTH :
+
+ REGISTER :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - THE PIN IS NOT 6 DIGITS LONG
+   - INPUT DOES NOT MATCH DATA TYPE
+   - ENTERING THE REGISTERED EMAIL
+  = SUCCESS TEST =
+   - REGISTER USER
+
+ LOGIN :
+  = ERROR TEST =
+   - REMOVE ONE OF THE PARAMETERS
+   - WRONG EMAIL
+   - WRONG PIN
+  = SUCCESS TEST =
+   - LOGIN USER
+
+USER :
+
+ TOPUP :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - WRONG PARAMETER
+   - WRONG PIN
+  = SUCCESS TEST =
+   - TOPUP USER
+
+ GET BALANCE :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+  = SUCCESS TEST =
+   - GET USER BALANCE
+
+ EDIT BALANCE :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - WRONG PARAMETER
+   - WRONG PIN
+  = SUCCESS TEST =
+   - EDIT USER BALANCE
+
+ ENTER A PARK :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - PARK NOT FOUND
+   - PIN NOT ENTERED
+   - WRONG PIN
+   - BALANCE IS NOT ENOUGH
+  = SUCCESS TEST =
+   - ENTER A PARK
+   - REDUCED SALDO
+   - ADD INVOICE
+
+ GET ALL INVOICES :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+  = SUCCES TEST =
+   - GET ALL INVOICES
+
+ GET INVOICE :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - WRONG INVOICE ID
+  = SUCCESS TEST =
+   - GET INVOICE DATA
+
+ GET PROFILE :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+  = SUCCESS TEST =
+   - GET PROFILE DATA
+
+ DELETE USER :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+  = SUCCESS TEST =
+   - DELETE USER
+
+PARK :
+
+ CREATE PARK :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - WRONG PARAMETER
+   - NOT ADMIN
+   - WRONG PIN
+  = SUCCESS TEST =
+   - CREATE A NEW PARK
+
+ GET PARK DETAIL :
+  = ERROR TEST =
+   - WRONG PARK ID
+  = SUCCESS TEST =
+   - GET PARK DATA
+
+ EDIT PARK DATA :
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - WRONG PARAMETER
+   - NOT ADMIN
+   - WRONG PIN
+   - WRONG PARK ID
+  = SUCCESS TEST =
+   - EDIT PARK DATA
+
+ DELETE PARK
+  = ERROR TEST =
+   - NOT USE AUTH TOKEN
+   - WRONG TOKEN
+   - WRONG PARK ID
+   - NOT ADMIN
+   - WRONG PIN
+  = SUCCESS TEST =
+   - DELETE PARK
+ ```
+
+Contact me on :
+
+ - [INSTAGRAM](https://instagram.com/fadhilmail)
+ - [LINE](https://line.me/ti/p/Vp3iX3D4JE)
