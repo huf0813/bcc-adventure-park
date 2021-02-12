@@ -6,6 +6,7 @@ This is a REST API made with [Node.js](https://nodejs.org/) with [Fastify](https
 
 The server will normally run on `http://localhost:420`, if port 420 is not available, it will choose a random port.
 For more information, you can see the docs at the `GET /docs` endpoint. The Swagger-formatted specs is available in under the `specs` directory.
+
 ---
 ### Commands
  - Install dependencies: `npm install`
