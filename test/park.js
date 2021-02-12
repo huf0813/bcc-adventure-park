@@ -16,6 +16,9 @@ function assertIsValidFullParkObject(park){
 }
 
 const dummyPark = { name: "Integration Testing Park #1", details: "Integration Testing Park #1", entranceFee: 420360 }
+const adminUser = { email: "admin@izfaruqi.com", name: "Chad AF Admin b0i", pass: "correct_horse_battery_staple" }
+const visitorUser = { email: "pleb@izfaruqi.com", name: "pleb visitor", pass: "123456" }
+
 function assertDummyPark(park){
   assertIsValidFullParkObject(park)
   assert.isNumber(park.id, "id should be generated and be a number")
@@ -25,14 +28,29 @@ function assertDummyPark(park){
 }
 
 describe("/park endpoints", function () {
-  before(function(done) {
-    db('parks').delete().then(() => done())
+  before(async function() {
+    await db('parks').delete()
+    await db('park_visits').delete()
+    await db('users').delete()
+    await session.clear()
+
+    await this.requester.post("/user/register").send({ ...adminUser, isAdmin: true, token: true }).then((res, err) => {
+      this.adminId = res.body.id
+      this.adminToken = res.body.token.token
+    })
+    await this.requester.post("/user/register").send({ ...visitorUser, isAdmin: false, token: true }).then((res, err) => {
+      this.visitorId = res.body.id
+      this.visitorToken = res.body.token.token
+    })
+    assert.include(await db('users').select(["email", "name", "level"]).where({ id: this.adminId }).first(), { email: adminUser.email, name: adminUser.name, level: "admin" }, "insert new admin user unsuccessful")
+    assert.include(await db('users').select(["email", "name", "level"]).where({ id: this.visitorId }).first(), { email: visitorUser.email, name: visitorUser.name, level: "visitor" })
   })
 
   describe("POST /park, for inserting a park", function(){
-    describe('insert a new park with full information', function(){
+    describe('insert a new park with full information as an admin', function(){
       before(function(done){
         this.requester.post('/park')
+          .set("Authorization", "Bearer " + this.adminToken)
           .send(dummyPark)
           .then((res, err) => {
             if(err){ console.error(err) }
@@ -54,9 +72,10 @@ describe("/park endpoints", function () {
       })
     })
   
-    describe('insert a new park with partial information', function(){
+    describe('insert a new park with partial information as an admin', function(){
       before(function(done){
         this.requester.post('/park')
+          .set("Authorization", "Bearer " + this.adminToken)  
           .send({ name: dummyPark.name, entranceFee: dummyPark.entranceFee })
           .then((res, err) => {
             if(err){ console.error(err) }
@@ -78,9 +97,10 @@ describe("/park endpoints", function () {
       })
     })
   
-    describe('insert a new park with no name', function(){
+    describe('insert a new park with no name as an admin', function(){
       before(function(done){
         this.requester.post('/park')
+          .set("Authorization", "Bearer " + this.adminToken)
           .send({ details: dummyPark.details, entranceFee: dummyPark.entranceFee })
           .then((res, err) => {
             if(err){ console.error(err) }
@@ -94,6 +114,74 @@ describe("/park endpoints", function () {
         done()
       })
 
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
+
+    describe('insert a new park with full information as a visitor', function(){
+      before(function(done){
+        this.requester.post('/park')
+          .set("Authorization", "Bearer " + this.visitorToken)
+          .send(dummyPark)
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()
+          })
+      })
+  
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
+        done()
+      })
+  
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
+
+    describe('insert a new park with full information without a token', function(){
+      before(function(done){
+        this.requester.post('/park')
+          .send(dummyPark)
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()
+          })
+      })
+  
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
+        done()
+      })
+  
+      it('should return an error message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+        done()
+      })
+    })
+
+    describe('insert a new park with no name as a visitor', function(){
+      before(function(done){
+        this.requester.post('/park')
+          .set("Authorization", "Bearer " + this.visitorToken)
+          .send({ details: dummyPark.details, entranceFee: dummyPark.entranceFee })
+          .then((res, err) => {
+            if(err){ console.error(err) }
+            this.requestResult = res
+            done()
+          })
+      })
+  
+      it('should return status code 401', function(done){
+        assert.equal(this.requestResult.status, 401)
+        done()
+      })
+  
       it('should return an error message', function(done){
         assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
