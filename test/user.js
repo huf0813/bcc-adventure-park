@@ -81,6 +81,38 @@ describe('/user endpoints', function(){
       })
     })
 
+    describe('insert a new admin user and request token with an email and a password', function(){
+      before(async function(){
+        await db('users').delete()
+        await this.requester.post(url).send({ email: newUser.email, pass: newUser.pass, token: true, isAdmin: true }).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+  
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+  
+      it('should return a token, the new user id, and a success message', function(done){
+        assert.hasAllKeys(this.requestResult.body, ["message", "token", "id"], "body does not have the required keys")
+        assert.isNumber(this.requestResult.body.id)
+        assert.equal(this.requestResult.body.message, "success", "message returned is not success")
+        assertValidTokenObject(this.requestResult.body.token)
+        done()
+      })
+  
+      it('new admin user should be available in the db', async function(){
+        const userFromDb = await db('users').select("*").where({ email: newUser.email }).first()
+        assert.isDefined(userFromDb, "new user not found in the db")
+        assert.equal(userFromDb.level, "admin", "new user is not admin")
+      })
+
+      it('token should be valid', async function(){
+        assert.isDefined(await session.get(this.requestResult.body.token.token))
+      })
+    })
+
     describe('try to insert a new user with only an email', function(){
       before(async function(){
         await db('users').delete()
