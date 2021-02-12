@@ -265,4 +265,38 @@ module.exports = async (fastify, opts, done) => {
       rep.send(await userService.getUserInvoices(req.session.id))
     }
   })
+
+  fastify.route({
+    method: 'GET',
+    url: '/token',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          required: ['token', 'expiresAt'],
+          properties: {
+            token: { type: 'string' },
+            expiresAt: { type: 'number' }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken
+    ]),
+    handler: async (req, rep) => {
+      const oldToken = req.headers.authorization.substring(7)
+      const id = req.session.id
+      await authService.invalidateToken(oldToken)
+      rep.send(await authService.generateToken(id))
+    }
+  })
 }

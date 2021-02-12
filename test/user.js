@@ -1,5 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const { as } = require('../src/utils/db');
 const assert = chai.assert;
 
 chai.use(chaiHttp)
@@ -76,7 +77,7 @@ describe('/user endpoints', function(){
       })
 
       it('token should be valid', async function(){
-        assert.isNotNull(await session.get(this.requestResult.body.token.token))
+        assert.isDefined(await session.get(this.requestResult.body.token.token))
       })
     })
 
@@ -332,6 +333,73 @@ describe('/user endpoints', function(){
             assert.isBoolean(invoice.park.isParkDeleted)
           })
           done()
+        })
+      })
+    })
+
+    describe('/user/token, for actions regarding user tokens', function(){
+      describe('GET /user/token, for getting a new token for a user', function(){
+        describe('get a new token for the user provided by the old token', function(){
+          before(async function(){
+            await this.requester.get(url + '/token').set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+              this.requestResult = res
+            })
+          })
+
+          it('should return status code 200', function(done){
+            assert.equal(this.requestResult.status, 200)
+            done()
+          })
+
+          it('should return a new token', function(done){
+            const res = this.requestResult.body
+            assert.hasAllKeys(res, ["token", "expiresAt"])
+            assert.isString(res.token)
+            assert.isNumber(res.expiresAt)
+            done()
+          })
+
+          it('new token should be valid', async function(){
+            assert.isDefined(await session.get(this.requestResult.body.token), "token returned is invalid")
+          })
+
+          it('old token should be invalid', async function(){
+            assert.isUndefined(await session.get(this.tokenToBeTested), "old token still valid")
+          })
+
+          after(function(){
+            this.tokenToBeTested = this.requestResult.body.token
+          })
+        })
+
+        describe('get a new token for the user with an invalid token', function(){
+          before(async function(){
+            await this.requester.post(url + "/register").send({ ...newUser, email: "qq@izfaruqi.com", token: true }).then((res, err) => {
+              this.idToBeTested = res.body.id
+              this.tokenToBeTested = res.body.token.token
+            })
+            await this.requester.get(url + '/token').set("Authorization", "Bearer 0wo").then((res, err) => {
+              this.requestResult = res
+            })
+          })
+
+          it('should return status code 401', function(done){
+            assert.equal(this.requestResult.status, 401)
+            done()
+          })
+    
+          it('should return an error message', function(done){
+            assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+            done()
+          })
+
+          it('old token should still be valid', async function(){
+            assert.isDefined(await session.get(this.tokenToBeTested), "old token is invalid")
+          })
+
+          after(function(){
+            this.tokenToBeTested = this.requestResult.body.token
+          })
         })
       })
     })

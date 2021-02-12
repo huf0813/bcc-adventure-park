@@ -1,7 +1,6 @@
 const crypto = require('crypto')
 const session = require('../utils/session')
 const db = require('../utils/db')
-const userService = require('../services/user')
 
 const TOKEN_LIFESPAN = 86400000
 
