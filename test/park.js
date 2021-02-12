@@ -479,7 +479,7 @@ describe("/park endpoints", function () {
       })
 
       it('the deleted park should not exist in the db', async function(){
-        assert.isNull(await db('parks').select("*").where({ id: this.idToBeTested }).first())
+        assert.isUndefined(await db('parks').select("*").where({ id: this.idToBeTested }).first())
       })
     })
 

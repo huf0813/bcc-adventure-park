@@ -266,6 +266,9 @@ module.exports = async (fastify, opts, done) => {
     method: 'DELETE',
     url: '/:id',
     schema: {
+      querystring: {
+        permanent: { type: 'boolean' }
+      },
       response: {
         200: {
           type: 'object',
@@ -296,7 +299,12 @@ module.exports = async (fastify, opts, done) => {
         })
       }
 
-      const success = await parkService.deleteParkById(parseInt(req.params.id))
+      let success
+      if(req.query.permanent){
+        success = await parkService.deleteParkById(parseInt(req.params.id), true)
+      } else {
+        success = await parkService.deleteParkById(parseInt(req.params.id))
+      }
       if(!success){
         rep.code(404)
         rep.send({

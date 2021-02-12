@@ -32,8 +32,12 @@ async function editParkById(id, partialPark){
   return await db('parks').where({ id: id, isDeleted: 0 }).update({ ...partialPark })
 }
 
-async function deleteParkById(id){
-  return await db('parks').where({ id: id, isDeleted: 0 }).update({ isDeleted: 1 })
+async function deleteParkById(id, permanent = false){
+  if(permanent){
+    return await db('parks').where({ id: id, isDeleted: 0 }).delete()
+  } else {
+    return await db('parks').where({ id: id, isDeleted: 0 }).update({ isDeleted: 1 })
+  }
 }
 
 async function visitPark(parkId, userId){
