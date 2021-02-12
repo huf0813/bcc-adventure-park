@@ -241,6 +241,57 @@ module.exports = async (fastify, opts, done) => {
   })
 
   fastify.route({
+    method: 'DELETE',
+    url: '/:id',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          required: ["balance", "message"],
+          properties: {
+            balance: { type: "number" },
+            message: { type: "string" }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken,
+      fastify.verifyMinAdmin
+    ]),
+    handler: async (req, rep) => {
+      if(isNaN(parseInt(req.params.id))){
+        rep.code(400)
+        rep.send({
+          error: "Bad Request",
+          message: "User ID should be a number"
+        })
+      }
+      const deletedUser = await userService.getUserById(parseInt(req.params.id))
+      if(deletedUser.level == "admin"){
+        rep.code(401)
+        rep.send({
+          error: "Unauthorized",
+          message: "Admins cannot delete other admins"
+        })
+      }
+      
+      const remainingBalance = deletedUser.balance
+      await userService.deleteUser(parseInt(req.params.id))
+      await authService.invalidateUserId(parseInt(req.params.id))
+      rep.send({ balance: remainingBalance, message: "success" })
+    }
+  })
+
+  fastify.route({
     method: 'GET',
     url: '/invoice',
     schema: {
