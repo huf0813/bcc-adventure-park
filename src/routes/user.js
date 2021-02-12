@@ -399,6 +399,41 @@ module.exports = async (fastify, opts, done) => {
 
   fastify.route({
     method: 'GET',
+    url: '/all',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          required: ["totalUsers", "totalAdmins", "totalVisitors", "users"],
+          properties: {
+            totalUsers: { type: 'number' },
+            totalAdmins: { type: 'number' },
+            totalVisitors: { type: 'number' },
+            users: { type: 'array' }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken,
+      fastify.verifyMinAdmin
+    ], { relation: "and" }),
+    handler: async (req, rep) => {
+      const users = await userService.getAllUsers()
+      rep.send(users)
+    }
+  })
+
+  fastify.route({
+    method: 'GET',
     url: '/:id',
     schema: {
       response: {

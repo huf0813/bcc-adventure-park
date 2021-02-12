@@ -44,6 +44,20 @@ async function getUserInvoices(userId){
   return { totalSpent: totalSpent, totalInvoices: invoices.length, invoices: invoices }
 }
 
+async function getAllUsers(){
+  const usersList = await db('users').select(["id", "email", "name", "balance", "level"])
+  let totalAdmins = 0
+  let totalVisitors = 0
+  usersList.forEach(user => {
+    if(user.level == "admin"){
+      totalAdmins++
+    } else {
+      totalVisitors++
+    }
+  })
+  return { totalUsers: usersList.length, totalAdmins: totalAdmins, totalVisitors: totalVisitors, users: usersList }
+}
+
 module.exports = {
   LEVEL_VISITOR,
   LEVEL_ADMIN,
@@ -52,5 +66,6 @@ module.exports = {
   setUserBalance,
   topupUserBalance,
   deleteUser,
-  getUserInvoices
+  getUserInvoices,
+  getAllUsers
 }

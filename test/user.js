@@ -307,6 +307,71 @@ describe('/user endpoints', function(){
         })
       })
     })
+
+    describe("GET /user/all, get all users", function(){
+      before(async function(){
+        await this.requester.post(url + "/register").send({ ...newUser, email: "admin1@izfaruqi.com", token: true, isAdmin: true }).then((res, err) => {
+          this.adminToken = res.body.token.token
+        })
+        await this.requester.post(url + "/register").send({ ...newUser, email: "admin2@izfaruqi.com", token: true, isAdmin: true })
+        await this.requester.post(url + "/register").send({ ...newUser, email: "admin3@izfaruqi.com", token: true, isAdmin: true })
+        await this.requester.post(url + "/register").send({ ...newUser, email: "visitor1@izfaruqi.com", token: true }).then((res, err) => {
+          this.idToBeTested = res.body.id
+          this.tokenToBeTested = res.body.token.token
+        })
+        await this.requester.post(url + "/register").send({ ...newUser, email: "visitor2@izfaruqi.com", token: true })
+        await this.requester.post(url + "/register").send({ ...newUser, email: "visitor3@izfaruqi.com", token: true })
+        await this.requester.post(url + "/register").send({ ...newUser, email: "visitor4@izfaruqi.com", token: true })
+      })
+
+      describe("get all users as admin", function(){
+        before(async function(){
+          await this.requester.get(url + "/all").set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
+
+        it('should return total users, total admins, total visitors, and the list of all users', function(done){
+          const res = this.requestResult.body
+          assert.hasAllKeys(res, ["totalUsers", "totalVisitors", "totalAdmins", "users"])
+          assert.isNumber(res.totalUsers)
+          assert.isNumber(res.totalVisitors)
+          assert.isNumber(res.totalAdmins)
+          assert.isArray(res.users)
+          done()
+        })
+
+        it('the list of users should be valid', function(done){
+          this.requestResult.body.users.forEach(user => {
+            assert.hasAllKeys(user, ["id", "email", "name", "balance", "level"])
+          })
+          done()
+        })
+      })
+
+      describe('get all users as non-admin', function(){
+        before(async function(){
+          await this.requester.get(url + "/all").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+  
+        it('should return status code 401', function(done){
+          assert.equal(this.requestResult.status, 401)
+          done()
+        })
+  
+        it('should return an error message', function(done){
+          assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+          done()
+        })
+      })
+    })
   })
 
   describe('/user/balance endpoints, for actions regarding user balance', function(){
