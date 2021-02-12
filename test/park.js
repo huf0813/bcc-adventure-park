@@ -445,10 +445,41 @@ describe("/park endpoints", function () {
         done()
       })
 
-      it('the deleted park should not be obtainable by GET /park/:id', async function(){
+      it('the deleted park should not be obtainable by GET /park/:id with a non-admin', async function(){
         await this.requester.get('/park/' + this.idToBeTested).then((res, err) => {
           assert.equal(res.status, 404)
         })
+      })
+    })
+
+    describe('permanently delete a park by a valid id as an admin', function(){
+      before(async function(){
+        await this.requester.post('/park').set("Authorization", "Bearer " + this.adminToken).send(dummyPark).then((res, err) => {
+          this.idToBeTested = res.body.id
+        })
+        await this.requester.delete('/park/' + this.idToBeTested + "?permanent=true").set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return a success message object', function(done){
+        assert.equal(this.requestResult.body.message, "success")
+        done()
+      })
+
+      it('the deleted park should not be obtainable by GET /park/:id for a non-admin', async function(){
+        await this.requester.get('/park/' + this.idToBeTested).then((res, err) => {
+          assert.equal(res.status, 404)
+        })
+      })
+
+      it('the deleted park should not exist in the db', async function(){
+        assert.isNull(await db('parks').select("*").where({ id: this.idToBeTested }).first())
       })
     })
 
