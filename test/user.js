@@ -183,6 +183,9 @@ describe('/user endpoints', function(){
     before(async function(){
       await db('users').delete()
       await session.clear()
+      await this.requester.post(url + "/register").send({ ...newUser, email: "adminGet@izfaruqi.com", token: true, isAdmin: true }).then((res, err) => {
+        this.adminToken = res.body.token.token
+      })
       await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
         this.idToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
@@ -243,6 +246,65 @@ describe('/user endpoints', function(){
       it('should return an error message', function(done){
         assert.hasAllKeys(this.requestResult.body, ["error", "message"])
         done()
+      })
+    })
+
+    describe("GET /user/:id, get other user's profile", function(){
+      describe('get other profile as admin', function(){
+        before(async function(){
+          await this.requester.get(url + "/" + this.idToBeTested).set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+  
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
+  
+        it('should return the same user data as the ones provided', function(done){
+          const returnedUser = this.requestResult.body
+          assert.equal(returnedUser.id, this.idToBeTested)
+          assert.equal(returnedUser.email, newUser.email)
+          assert.equal(returnedUser.balance, 0)
+          done()
+        })
+      })
+
+      describe('get other profile as non-admin', function(){
+        before(async function(){
+          await this.requester.get(url + "/" + this.idToBeTested).set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+  
+        it('should return status code 401', function(done){
+          assert.equal(this.requestResult.status, 401)
+          done()
+        })
+  
+        it('should return an error message', function(done){
+          assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+          done()
+        })
+      })
+
+      describe('get an invalid profile as admin', function(){
+        before(async function(){
+          await this.requester.get(url + "/-1").set("Authorization", "Bearer " + this.adminToken).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+  
+        it('should return status code 404', function(done){
+          assert.equal(this.requestResult.status, 404)
+          done()
+        })
+  
+        it('should return an error message', function(done){
+          assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+          done()
+        })
       })
     })
   })

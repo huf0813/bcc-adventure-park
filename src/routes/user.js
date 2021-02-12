@@ -266,7 +266,7 @@ module.exports = async (fastify, opts, done) => {
     preHandler: fastify.auth([
       fastify.verifyToken,
       fastify.verifyMinAdmin
-    ]),
+    ], { relation: "and" }),
     handler: async (req, rep) => {
       if(isNaN(parseInt(req.params.id))){
         rep.code(400)
@@ -394,6 +394,55 @@ module.exports = async (fastify, opts, done) => {
     handler: async (req, rep) => {
       await authService.invalidateUserId(req.session.id)
       rep.send(await authService.generateToken(req.session.id))
+    }
+  })
+
+  fastify.route({
+    method: 'GET',
+    url: '/:id',
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+            email: { type: 'string' },
+            name: { type: 'string' },
+            level: { type: 'string' },
+            balance: { type: 'number'}
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyToken,
+      fastify.verifyMinAdmin
+    ], { relation: "and" }),
+    handler: async (req, rep) => {
+      if(isNaN(parseInt(req.params.id))){
+        rep.code(400)
+        rep.send({
+          error: "Bad Request",
+          message: "User ID should be a number"
+        })
+      }
+      const user = await userService.getUserById(parseInt(req.params.id))
+      if(user == null){
+        rep.code(404)
+        rep.send({
+          error: "Not Found",
+          message: "User does not exist"
+        })
+      }
+      rep.send(user)
     }
   })
 }
