@@ -1,6 +1,5 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { as } = require('../src/utils/db');
 const assert = chai.assert;
 
 chai.use(chaiHttp)
@@ -336,7 +335,7 @@ describe('/user endpoints', function(){
     before(async function(){
       await db('users').delete()
       await session.clear()
-      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+      await this.requester.post(url + "/register").send({ ...newUser, token: true, isAdmin: true }).then((res, err) => {
         this.idToBeTested = res.body.id
         this.tokenToBeTested = res.body.token.token
       })
@@ -344,14 +343,14 @@ describe('/user endpoints', function(){
     before(async function() {
       await db('park_visits').delete()
       await db('parks').delete()
-      await this.requester.post("/park").send(dummyPark1).then((res, err) => this.dummyPark1Id = res.body.id)
-      await this.requester.post("/park").send(dummyPark2).then((res, err) => this.dummyPark2Id = res.body.id)
-      await this.requester.post("/park").send(dummyPark3).then((res, err) => this.dummyPark3Id = res.body.id)
+      await this.requester.post("/park").set("Authorization", "Bearer " + this.tokenToBeTested).send(dummyPark1).then((res, err) => this.dummyPark1Id = res.body.id)
+      await this.requester.post("/park").set("Authorization", "Bearer " + this.tokenToBeTested).send(dummyPark2).then((res, err) => this.dummyPark2Id = res.body.id)
+      await this.requester.post("/park").set("Authorization", "Bearer " + this.tokenToBeTested).send(dummyPark3).then((res, err) => this.dummyPark3Id = res.body.id)
       await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 6666666 })
       await this.requester.get("/park/" + this.dummyPark1Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
       await this.requester.get("/park/" + this.dummyPark2Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
       await this.requester.get("/park/" + this.dummyPark3Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
-      await this.requester.delete("/park/" + this.dummyPark2Id)
+      await this.requester.delete("/park/" + this.dummyPark2Id).set("Authorization", "Bearer " + this.tokenToBeTested)
     })
 
     describe('GET /user/invoice, for getting a list of all invoices from self', function(){
