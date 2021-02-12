@@ -25,8 +25,21 @@ async function invalidateToken(token){
   }
 }
 
+async function invalidateUserId(userId){
+  try {
+    const token = await session.get("token_" + userId)
+    await session.delete(token)
+    await session.delete("token_" + userId)
+  } catch (e){
+
+  } finally {
+    return
+  }
+}
+
 module.exports = {
   TOKEN_LIFESPAN,
   generateToken,
-  invalidateToken
+  invalidateToken,
+  invalidateUserId
 }

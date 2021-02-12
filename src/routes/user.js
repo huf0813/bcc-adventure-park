@@ -299,4 +299,44 @@ module.exports = async (fastify, opts, done) => {
       rep.send(await authService.generateToken(id))
     }
   })
+
+  fastify.route({
+    method: 'POST',
+    url: '/token',
+    schema: {
+      body: {
+        type: 'object',
+        required: ["email", "pass"],
+        properties: {
+          email: { type: "string" },
+          pass: { type: "string" }
+        }
+      },
+      response: {
+        200: {
+          type: 'object',
+          required: ['token', 'expiresAt'],
+          properties: {
+            token: { type: 'string' },
+            expiresAt: { type: 'number' }
+          }
+        },
+        '4xx':{
+          type: 'object',
+          required: ['message', 'error'],
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' }
+          }
+        }
+      }
+    },
+    preHandler: fastify.auth([
+      fastify.verifyEmailPassword
+    ]),
+    handler: async (req, rep) => {
+      await authService.invalidateUserId(req.session.id)
+      rep.send(await authService.generateToken(req.session.id))
+    }
+  })
 }

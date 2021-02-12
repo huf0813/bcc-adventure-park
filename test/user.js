@@ -359,16 +359,17 @@ describe('/user endpoints', function(){
 
   describe('/user/token, for actions regarding user tokens', function(){
     const url = "/user"
-    before(async function(){
-      await db('users').delete()
-      await session.clear()
-      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
-        this.idToBeTested = res.body.id
-        this.tokenToBeTested = res.body.token.token
-      })
-    })
 
     describe('GET /user/token, for getting a new token for a user', function(){
+      before(async function(){
+        await db('users').delete()
+        await session.clear()
+        await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+          this.idToBeTested = res.body.id
+          this.tokenToBeTested = res.body.token.token
+        })
+      })
+
       describe('get a new token for the user provided by the old token', function(){
         before(async function(){
           await this.requester.get(url + '/token').set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
@@ -434,6 +435,15 @@ describe('/user endpoints', function(){
     })
 
     describe('POST /user/token, for getting a new token for a user by email and password', function(){
+      before(async function(){
+        await db('users').delete()
+        await session.clear()
+        await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+          this.idToBeTested = res.body.id
+          this.tokenToBeTested = res.body.token.token
+        })
+      })
+
       describe('get a new token for the user provided by email and password', function(){
         before(async function(){
           this.oldToken = await session.get("token_" + this.idToBeTested)
@@ -471,7 +481,7 @@ describe('/user endpoints', function(){
       describe('get a new token for the user with an invalid user and password', function(){
         before(async function(){
           this.oldToken = await session.get("token_" + this.idToBeTested)
-          await this.requester.post(url + '/token').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+          await this.requester.post(url + '/token').send({ email: "make_it_invalid" + newUser.email, pass: "make_it_invalid" + newUser.pass }).then((res, err) => {
             this.requestResult = res
           })
         })

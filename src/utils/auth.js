@@ -29,6 +29,8 @@ async function verifyEmailPassword(req, rep){
   }
   const checkPassword = await bcrypt.compare(pass, userFromDb.pass)
   if(checkPassword){
+    req.session = {}
+    req.session.id = userFromDb.id
     return
   } else {
     throw new Error(ERR_INVALID_EMAILPASS)
