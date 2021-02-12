@@ -1,4 +1,5 @@
 const parkService = require('../services/park')
+const { verifyMinAdminStandalone } = require('../utils/auth')
 
 module.exports = async (fastify, opts, done) => {
   fastify.route({
@@ -24,6 +25,18 @@ module.exports = async (fastify, opts, done) => {
       }
     },
     handler: async (req, rep) => {
+      if(req.headers.authorization != null){
+        try {
+          await verifyMinAdminStandalone(req.headers.authorization)
+          const parks = await parkService.getAllParks(true)
+          rep.send({
+            total: parks.length,
+            parks: parks
+          })
+        } catch (e) {
+          
+        }
+      }
       const parks = await parkService.getAllParks()
       rep.send({
         total: parks.length,
@@ -166,7 +179,18 @@ module.exports = async (fastify, opts, done) => {
         })
       }
 
-      const park = await parkService.getParkById(parseInt(req.params.id))
+      let park
+      if(req.headers.authorization != null){
+        try {
+          await verifyMinAdminStandalone(req.headers.authorization)
+          park = await parkService.getParkById(parseInt(req.params.id), true)
+        } catch (e) {
+          park = await parkService.getParkById(parseInt(req.params.id))
+        }
+      } else {
+        park = await parkService.getParkById(parseInt(req.params.id))
+      }
+
       if(park == null){
         rep.code(404)
         rep.send({

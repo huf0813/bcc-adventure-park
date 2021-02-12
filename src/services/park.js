@@ -6,12 +6,20 @@ const defaultParkObject = {
   isDeleted: 0
 }
 
-async function getAllParks(){
-  return await db('parks').select(["id", "name", "details", "entranceFee"]) 
+async function getAllParks(includeDeleted = false){
+  if(includeDeleted){
+    return await db('parks').select(["id", "name", "details", "entranceFee", "isDeleted"])
+  } else {
+    return await db('parks').select(["id", "name", "details", "entranceFee"]).where({ isDeleted: 0})
+  }
 }
 
-async function getParkById(id){
-  return await db('parks').select(["id", "name", "details", "entranceFee"]).where({ id: id, isDeleted: 0 }).first()
+async function getParkById(id, includeDeleted = false){
+  if(includeDeleted){
+    return await db('parks').select(["id", "name", "details", "entranceFee"]).where({ id: id }).first()
+  } else {
+    return await db('parks').select(["id", "name", "details", "entranceFee"]).where({ id: id, isDeleted: 0 }).first()
+  }
 }
 
 async function addPark(park){

@@ -46,8 +46,23 @@ async function verifyMinAdmin(req, rep){
   }
 }
 
+async function verifyMinAdminStandalone(rawToken){
+  const token = rawToken.substring(7)
+  const sessionData = await session.get(token)
+  if(sessionData != null){
+    if(sessionData.level == "admin"){
+      return
+    } else {
+      throw new Error(ERR_NOT_ENOUGH_PRIVILEGE)
+    }
+  } else {
+    throw new Error(ERR_INVALID_TOKEN)
+  }
+}
+
 module.exports = {
   verifyToken,
   verifyEmailPassword,
-  verifyMinAdmin
+  verifyMinAdmin,
+  verifyMinAdminStandalone
 }
