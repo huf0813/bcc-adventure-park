@@ -63,6 +63,10 @@ module.exports = async (fastify, opts, done) => {
         }
       }
     },
+    preHandler: fastify.auth([
+      fastify.verifyToken,
+      fastify.verifyMinAdmin
+    ], { relation: "and" }),
     handler: async (req, rep) => {
       const insertedPark = await parkService.addPark(req.body)
       rep.send({ ...insertedPark })
@@ -208,6 +212,10 @@ module.exports = async (fastify, opts, done) => {
         }
       }
     },
+    preHandler: fastify.auth([
+      fastify.verifyToken,
+      fastify.verifyMinAdmin
+    ], { relation: "and" }),
     handler: async (req, rep) => {
       if(isNaN(parseInt(req.params.id))){
         rep.code(400)
@@ -251,6 +259,10 @@ module.exports = async (fastify, opts, done) => {
         }
       }
     },
+    preHandler: fastify.auth([
+      fastify.verifyToken,
+      fastify.verifyMinAdmin
+    ], { relation: "and" }),
     handler: async (req, rep) => {
       if(isNaN(parseInt(req.params.id))){
         rep.code(400)
@@ -274,6 +286,4 @@ module.exports = async (fastify, opts, done) => {
       })
     }
   })
-
-  
 }
