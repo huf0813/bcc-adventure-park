@@ -35,9 +35,9 @@ async function deleteUser(id){
 }
 
 async function getUserInvoices(userId){
-  const invoicesRaw = await db('park_visits').leftJoin("parks", "parks.id", "park_visits.park_id").select(["park_visits.id", "park_visits.id as park_id", "parks.name", "park_visits.entranceFeeOnVisit", "park_visits.visitedOn"]).where({ userId: userId })
+  const invoicesRaw = await db('park_visits').leftJoin("parks", "parks.id", "park_visits.park_id").select(["park_visits.id", "park_visits.id as park_id", "parks.name", "parks.is_deleted as is_park_deleted", "park_visits.entranceFeeOnVisit", "park_visits.visitedOn"]).where({ userId: userId })
   const invoices = invoicesRaw.map(invoice => {
-    const park = { id: invoice.parkId, name: invoice.name, isParkDeleted: (invoice.name == null)? true : false }
+    const park = { id: invoice.parkId, name: invoice.name, isParkDeleted: invoice.isParkDeleted? true : false }
     return { id: invoice.id, entranceFeeOnVisit: invoice.entranceFeeOnVisit, visitedOn: invoice.visitedOn, park: park }
   })
   const totalSpent = invoices.reduce((acc, invoice) => acc + invoice.entranceFeeOnVisit, 0)
