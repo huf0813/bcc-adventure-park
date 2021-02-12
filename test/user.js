@@ -74,6 +74,7 @@ describe('/user endpoints', function(){
       it('new user should be available in the db', async function(){
         const userFromDb = await db('users').select("*").where({ email: newUser.email }).first()
         assert.isDefined(userFromDb, "new user not found in the db")
+        assert.equal(userFromDb.level, "visitor", "new user is not visitor")
       })
 
       it('token should be valid', async function(){
