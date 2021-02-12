@@ -432,6 +432,61 @@ describe('/user endpoints', function(){
         })
       })
     })
+
+    describe('POST /user/token, for getting a new token for a user by email and password', function(){
+      describe('get a new token for the user provided by email and password', function(){
+        before(async function(){
+          this.oldToken = await session.get("token_" + this.idToBeTested)
+          await this.requester.post(url + '/token').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
+
+        it('should return a new token', function(done){
+          const res = this.requestResult.body
+          assert.hasAllKeys(res, ["token", "expiresAt"])
+          assert.isString(res.token)
+          assert.isNumber(res.expiresAt)
+          done()
+        })
+
+        it('new token should be valid', async function(){
+          assert.isDefined(await session.get(this.requestResult.body.token), "token returned is invalid")
+        })
+
+        it('old token should be invalid', async function(){
+          assert.isUndefined(await session.get(this.oldToken), "old token is still valid")
+        })
+
+        after(function(){
+          this.tokenToBeTested = this.requestResult.body.token
+        })
+      })
+
+      describe('get a new token for the user with an invalid user and password', function(){
+        before(async function(){
+          this.oldToken = await session.get("token_" + this.idToBeTested)
+          await this.requester.post(url + '/token').send({ email: newUser.email, pass: newUser.pass }).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+
+        it('should return status code 401', function(done){
+          assert.equal(this.requestResult.status, 401)
+          done()
+        })
+  
+        it('should return an error message', function(done){
+          assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+          done()
+        })
+      })
+    })
   })
 
   describe('DELETE /user, for deleting user tied to provided token', function(){
