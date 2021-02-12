@@ -213,97 +213,23 @@ describe('/user endpoints', function(){
         done()
       })
     })
+  })
 
-    describe('/user/balance endpoints, for actions regarding user balance', function(){
-      describe('GET /user/balance, for getting user balance', function(){
-        describe('get self balance (token provided)', function(){
-          before(async function() {
-            await this.requester.get(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
-              this.requestResult = res
-            })
-          })
-
-          it('should return status code 200', function(done){
-            assert.equal(this.requestResult.status, 200)
-            done()
-          })
-
-          it('balance should be 0 for new users', function(done){
-            assert.equal(this.requestResult.body.balance, 0)
-            done()
-          })
-        })
-      })
-
-      describe('POST /user/balance, for setting user balance', function(){
-        describe('set self balance (token provided)', function(){
-          const newBalance = 133700
-          before(async function() {
-            await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: newBalance }).then((res, err) => {
-              this.requestResult = res
-            })
-          })
-
-          it('should return status code 200', function(done){
-            assert.equal(this.requestResult.status, 200)
-            done()
-          })
-
-          it('should return the current balance for the user', function(done){
-            assert.equal(this.requestResult.body.balance, newBalance)
-            done()
-          })
-
-          it('balance update should be reflected in the db', async function(){
-            assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, newBalance)
-          })
-        })
-      })
-
-      describe('POST /user/balance/topup, for topping up user balance', function(){
-        describe('top up self balance (token provided)', function(){
-          const topupAmount = 42000
-          before(async function() {
-            this.initialUserBalance = (await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance
-            await this.requester.post(url + "/balance/topup").set("Authorization", "Bearer " + this.tokenToBeTested).send({ amount: topupAmount }).then((res, err) => {
-              this.requestResult = res
-            })
-          })
-
-          it('should return status code 200', function(done){
-            assert.equal(this.requestResult.status, 200)
-            done()
-          })
-
-          it('should return the current balance for the user', function(done){
-            assert.equal(this.requestResult.body.balance, topupAmount + this.initialUserBalance)
-            done()
-          })
-
-          it('balance update should be reflected in the db', async function(){
-            assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, topupAmount + this.initialUserBalance)
-          })
-        })
+  describe('/user/balance endpoints, for actions regarding user balance', function(){
+    const url = "/user"
+    before(async function(){
+      await db('users').delete()
+      await session.clear()
+      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+        this.idToBeTested = res.body.id
+        this.tokenToBeTested = res.body.token.token
       })
     })
 
-    describe('/user/invoice, for actions regarding user invoices', function(){
-      before(async function() {
-        await db('park_visits').delete()
-        await db('parks').delete()
-        await this.requester.post("/park").send(dummyPark1).then((res, err) => this.dummyPark1Id = res.body.id)
-        await this.requester.post("/park").send(dummyPark2).then((res, err) => this.dummyPark2Id = res.body.id)
-        await this.requester.post("/park").send(dummyPark3).then((res, err) => this.dummyPark3Id = res.body.id)
-        await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 6666666 })
-        await this.requester.get("/park/" + this.dummyPark1Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
-        await this.requester.get("/park/" + this.dummyPark2Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
-        await this.requester.get("/park/" + this.dummyPark3Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
-        await this.requester.delete("/park/" + this.dummyPark2Id)
-      })
-
-      describe('GET /user/invoice, for getting a list of all invoices from self', function(){
-        before(async function(){
-          await this.requester.get(url + "/invoice").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+    describe('GET /user/balance, for getting user balance', function(){
+      describe('get self balance (token provided)', function(){
+        before(async function() {
+          await this.requester.get(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
             this.requestResult = res
           })
         })
@@ -313,93 +239,196 @@ describe('/user endpoints', function(){
           done()
         })
 
-        it('should return the total balance spent and the list of invoices', function(done){
-          const res = this.requestResult.body
-          assert.isObject(res)
-          assert.hasAllKeys(res, ["totalSpent", "totalInvoices", "invoices"])
-          assert.isNumber(res.totalSpent)
-          assert.isNumber(res.totalInvoices)
-          assert.isArray(res.invoices)
-          done()
-        })
-
-        it('check every invoice object', function(done){
-          this.requestResult.body.invoices.forEach(invoice => {
-            assert.isNumber(invoice.id)
-            assert.isNumber(invoice.visitedOn)
-            assert.isNumber(invoice.entranceFeeOnVisit)
-            assert.hasAllKeys(invoice.park, ["id", "name", "isParkDeleted"])
-            assert.isNumber(invoice.park.id)
-            assert.isBoolean(invoice.park.isParkDeleted)
-          })
+        it('balance should be 0 for new users', function(done){
+          assert.equal(this.requestResult.body.balance, 0)
           done()
         })
       })
     })
 
-    describe('/user/token, for actions regarding user tokens', function(){
-      describe('GET /user/token, for getting a new token for a user', function(){
-        describe('get a new token for the user provided by the old token', function(){
-          before(async function(){
-            await this.requester.get(url + '/token').set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
-              this.requestResult = res
-            })
-          })
-
-          it('should return status code 200', function(done){
-            assert.equal(this.requestResult.status, 200)
-            done()
-          })
-
-          it('should return a new token', function(done){
-            const res = this.requestResult.body
-            assert.hasAllKeys(res, ["token", "expiresAt"])
-            assert.isString(res.token)
-            assert.isNumber(res.expiresAt)
-            done()
-          })
-
-          it('new token should be valid', async function(){
-            assert.isDefined(await session.get(this.requestResult.body.token), "token returned is invalid")
-          })
-
-          it('old token should be invalid', async function(){
-            assert.isUndefined(await session.get(this.tokenToBeTested), "old token still valid")
-          })
-
-          after(function(){
-            this.tokenToBeTested = this.requestResult.body.token
+    describe('POST /user/balance, for setting user balance', function(){
+      describe('set self balance (token provided)', function(){
+        const newBalance = 133700
+        before(async function() {
+          await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: newBalance }).then((res, err) => {
+            this.requestResult = res
           })
         })
 
-        describe('get a new token for the user with an invalid token', function(){
-          before(async function(){
-            await this.requester.post(url + "/register").send({ ...newUser, email: "qq@izfaruqi.com", token: true }).then((res, err) => {
-              this.idToBeTested = res.body.id
-              this.tokenToBeTested = res.body.token.token
-            })
-            await this.requester.get(url + '/token').set("Authorization", "Bearer 0wo").then((res, err) => {
-              this.requestResult = res
-            })
-          })
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
 
-          it('should return status code 401', function(done){
-            assert.equal(this.requestResult.status, 401)
-            done()
-          })
-    
-          it('should return an error message', function(done){
-            assert.hasAllKeys(this.requestResult.body, ["error", "message"])
-            done()
-          })
+        it('should return the current balance for the user', function(done){
+          assert.equal(this.requestResult.body.balance, newBalance)
+          done()
+        })
 
-          it('old token should still be valid', async function(){
-            assert.isDefined(await session.get(this.tokenToBeTested), "old token is invalid")
-          })
+        it('balance update should be reflected in the db', async function(){
+          assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, newBalance)
+        })
+      })
+    })
 
-          after(function(){
-            this.tokenToBeTested = this.requestResult.body.token
+    describe('POST /user/balance/topup, for topping up user balance', function(){
+      describe('top up self balance (token provided)', function(){
+        const topupAmount = 42000
+        before(async function() {
+          this.initialUserBalance = (await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance
+          await this.requester.post(url + "/balance/topup").set("Authorization", "Bearer " + this.tokenToBeTested).send({ amount: topupAmount }).then((res, err) => {
+            this.requestResult = res
           })
+        })
+
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
+
+        it('should return the current balance for the user', function(done){
+          assert.equal(this.requestResult.body.balance, topupAmount + this.initialUserBalance)
+          done()
+        })
+
+        it('balance update should be reflected in the db', async function(){
+          assert.equal((await db('users').where({ id: this.idToBeTested }).select("balance").first()).balance, topupAmount + this.initialUserBalance)
+        })
+      })
+    })
+  })
+
+  describe('/user/invoice, for actions regarding user invoices', function(){
+    const url = "/user"
+    before(async function(){
+      await db('users').delete()
+      await session.clear()
+      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+        this.idToBeTested = res.body.id
+        this.tokenToBeTested = res.body.token.token
+      })
+    })
+    before(async function() {
+      await db('park_visits').delete()
+      await db('parks').delete()
+      await this.requester.post("/park").send(dummyPark1).then((res, err) => this.dummyPark1Id = res.body.id)
+      await this.requester.post("/park").send(dummyPark2).then((res, err) => this.dummyPark2Id = res.body.id)
+      await this.requester.post("/park").send(dummyPark3).then((res, err) => this.dummyPark3Id = res.body.id)
+      await this.requester.post(url + "/balance").set("Authorization", "Bearer " + this.tokenToBeTested).send({ balance: 6666666 })
+      await this.requester.get("/park/" + this.dummyPark1Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
+      await this.requester.get("/park/" + this.dummyPark2Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
+      await this.requester.get("/park/" + this.dummyPark3Id + "/visit").set("Authorization", "Bearer " + this.tokenToBeTested)
+      await this.requester.delete("/park/" + this.dummyPark2Id)
+    })
+
+    describe('GET /user/invoice, for getting a list of all invoices from self', function(){
+      before(async function(){
+        await this.requester.get(url + "/invoice").set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+          this.requestResult = res
+        })
+      })
+
+      it('should return status code 200', function(done){
+        assert.equal(this.requestResult.status, 200)
+        done()
+      })
+
+      it('should return the total balance spent and the list of invoices', function(done){
+        const res = this.requestResult.body
+        assert.isObject(res)
+        assert.hasAllKeys(res, ["totalSpent", "totalInvoices", "invoices"])
+        assert.isNumber(res.totalSpent)
+        assert.isNumber(res.totalInvoices)
+        assert.isArray(res.invoices)
+        done()
+      })
+
+      it('check every invoice object', function(done){
+        this.requestResult.body.invoices.forEach(invoice => {
+          assert.isNumber(invoice.id)
+          assert.isNumber(invoice.visitedOn)
+          assert.isNumber(invoice.entranceFeeOnVisit)
+          assert.hasAllKeys(invoice.park, ["id", "name", "isParkDeleted"])
+          assert.isNumber(invoice.park.id)
+          assert.isBoolean(invoice.park.isParkDeleted)
+        })
+        done()
+      })
+    })
+  })
+
+  describe('/user/token, for actions regarding user tokens', function(){
+    const url = "/user"
+    before(async function(){
+      await db('users').delete()
+      await session.clear()
+      await this.requester.post(url + "/register").send({ ...newUser, token: true }).then((res, err) => {
+        this.idToBeTested = res.body.id
+        this.tokenToBeTested = res.body.token.token
+      })
+    })
+
+    describe('GET /user/token, for getting a new token for a user', function(){
+      describe('get a new token for the user provided by the old token', function(){
+        before(async function(){
+          await this.requester.get(url + '/token').set("Authorization", "Bearer " + this.tokenToBeTested).then((res, err) => {
+            this.requestResult = res
+          })
+        })
+
+        it('should return status code 200', function(done){
+          assert.equal(this.requestResult.status, 200)
+          done()
+        })
+
+        it('should return a new token', function(done){
+          const res = this.requestResult.body
+          assert.hasAllKeys(res, ["token", "expiresAt"])
+          assert.isString(res.token)
+          assert.isNumber(res.expiresAt)
+          done()
+        })
+
+        it('new token should be valid', async function(){
+          assert.isDefined(await session.get(this.requestResult.body.token), "token returned is invalid")
+        })
+
+        it('old token should be invalid', async function(){
+          assert.isUndefined(await session.get(this.tokenToBeTested), "old token still valid")
+        })
+
+        after(function(){
+          this.tokenToBeTested = this.requestResult.body.token
+        })
+      })
+
+      describe('get a new token for the user with an invalid token', function(){
+        before(async function(){
+          await this.requester.post(url + "/register").send({ ...newUser, email: "qq@izfaruqi.com", token: true }).then((res, err) => {
+            this.idToBeTested = res.body.id
+            this.tokenToBeTested = res.body.token.token
+          })
+          await this.requester.get(url + '/token').set("Authorization", "Bearer 0wo").then((res, err) => {
+            this.requestResult = res
+          })
+        })
+
+        it('should return status code 401', function(done){
+          assert.equal(this.requestResult.status, 401)
+          done()
+        })
+  
+        it('should return an error message', function(done){
+          assert.hasAllKeys(this.requestResult.body, ["error", "message"])
+          done()
+        })
+
+        it('old token should still be valid', async function(){
+          assert.isDefined(await session.get(this.tokenToBeTested), "old token is invalid")
+        })
+
+        after(function(){
+          this.tokenToBeTested = this.requestResult.body.token
         })
       })
     })
