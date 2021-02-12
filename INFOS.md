@@ -11,4 +11,3 @@ For more information, you can see the docs at the `GET /docs` endpoint. The Swag
  - Install dependencies: `npm install`
  - Running the server: `npm start`
  - Running tests: `npm tests`
- 
