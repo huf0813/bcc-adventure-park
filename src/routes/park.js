@@ -136,10 +136,23 @@ module.exports = async (fastify, opts, done) => {
       } catch (e){
         if(e.name == "VISIT_INSUFFICIENT_BALANCE"){
           rep.code(403)
-          rep.send(e)
-        } else {
+          rep.send({
+            error: "Forbidden",
+            message: e.message
+          })
+        } else if(e.name == "VISIT_PARK_NOT_FOUND"){
+          rep.code(404)
+          rep.send({
+            error: "Not Found",
+            message: e.message
+          })
+        }
+        else {
           rep.code(500)
-          rep.send(e)
+          rep.send({
+            error: "Internal Server Error",
+            message: e.message
+          })
         }
       }
     }
