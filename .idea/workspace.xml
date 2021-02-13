@@ -108,7 +108,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="jdk.selected.JAVA_MODULE" value="12" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/mysql-connector-java-5.1.49/mysql-connector-java-5.1.49-bin.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -173,22 +173,22 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1613123791705" />
-    <state width="984" height="295" key="GridCell.Tab.0.bottom" timestamp="1613147851086">
+    <state width="984" height="295" key="GridCell.Tab.0.bottom" timestamp="1613208227512">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1613147851086" />
-    <state width="984" height="295" key="GridCell.Tab.0.center" timestamp="1613147851086">
+    <state width="984" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227512" />
+    <state width="984" height="295" key="GridCell.Tab.0.center" timestamp="1613208227511">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1613147851086" />
-    <state width="984" height="295" key="GridCell.Tab.0.left" timestamp="1613147851086">
+    <state width="984" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227511" />
+    <state width="984" height="295" key="GridCell.Tab.0.left" timestamp="1613208227511">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1613147851086" />
-    <state width="984" height="295" key="GridCell.Tab.0.right" timestamp="1613147851086">
+    <state width="984" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227511" />
+    <state width="984" height="295" key="GridCell.Tab.0.right" timestamp="1613208227511">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1613147851086" />
+    <state width="984" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227511" />
     <state x="279" y="130" key="SettingsEditor" timestamp="1613124856701">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
