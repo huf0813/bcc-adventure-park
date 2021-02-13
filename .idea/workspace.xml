@@ -38,9 +38,6 @@
       <change beforePath="$PROJECT_DIR$/BCCAdventurePark/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/BCCAdventurePark/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BCCAdventurePark/build/classes/java/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/BCCAdventurePark/build/classes/java/main/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BCCAdventurePark/build/classes/java/main/Model.class" beforeDir="false" afterPath="$PROJECT_DIR$/BCCAdventurePark/build/classes/java/main/Model.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BCCAdventurePark/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BCCAdventurePark/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BCCAdventurePark/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/BCCAdventurePark/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BCCAdventurePark/src/main/java/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/BCCAdventurePark/src/main/java/Model.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,22 +170,22 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="740" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1613123791705" />
-    <state width="984" height="295" key="GridCell.Tab.0.bottom" timestamp="1613208227512">
+    <state width="984" height="295" key="GridCell.Tab.0.bottom" timestamp="1613212901788">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227512" />
-    <state width="984" height="295" key="GridCell.Tab.0.center" timestamp="1613208227511">
+    <state width="984" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1613212901788" />
+    <state width="984" height="295" key="GridCell.Tab.0.center" timestamp="1613212901788">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227511" />
-    <state width="984" height="295" key="GridCell.Tab.0.left" timestamp="1613208227511">
+    <state width="984" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1613212901788" />
+    <state width="984" height="295" key="GridCell.Tab.0.left" timestamp="1613212901787">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227511" />
-    <state width="984" height="295" key="GridCell.Tab.0.right" timestamp="1613208227511">
+    <state width="984" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1613212901787" />
+    <state width="984" height="295" key="GridCell.Tab.0.right" timestamp="1613212901788">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="984" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1613208227511" />
+    <state width="984" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1613212901788" />
     <state x="279" y="130" key="SettingsEditor" timestamp="1613124856701">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
